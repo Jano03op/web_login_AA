@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Registrarse</title>
+</head>
+<body>
+    <header>
+        <img class="logo" src="assets/logo_empresa_letra_v1.png" alt="Logo de SportClub">
+    </header>
+
+    <main>
+        <h2>Registrarse</h2>
+        <form>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" placeholder="Ingresa tu nombre" required>
+            <label for="correo">Email:</label>
+            <input type="email" id="correo" placeholder="Ingresa tu correo" required>
+            <label for="contraseña">contraseña:</label>
+            <input type="password" id="contraseña" placeholder="Ingresa tu contraseña" required>
+            <label for="edad">Edad:</label>
+            <input type="number" id="edad" placeholder="Ingresa tu edad" required>
+            <label for="deporte" >Deporte favorito:</label>
+            <select id="deporte">
+                <option value="">Selecciona un deporte</option>
+                <option value="futbol">Fútbol</option>
+                <option value="basketball">Baloncesto</option>
+                <option value="tennis">Tenis</option>
+            </select>
+            <button type="submit">Registrarse</button>
+        </form>
+    </main>
+</body>
+</html>
