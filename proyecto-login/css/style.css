@@ -2,6 +2,17 @@
     box-sizing: border-box;
 }
 
+:root {
+            --primary: #1A0040;
+            --secondary: #FFC72C;
+            --background: #F8F9FA;
+            --surface: #FFFFFF;
+            --surface-low: #F1F3F5;
+            --on-surface-variant: #4A4A68;
+            --outline-variant: rgba(209, 209, 224, 0.4);
+            --font-headline: 'Lexend', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
 body {
     background-color: lightcyan;
     min-height: 100vh;
