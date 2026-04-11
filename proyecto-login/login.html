@@ -1,29 +1,50 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
     <title>login sportclub</title>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <img class="logo" src="assets/logo_empresa_letra_v1.png" alt="Logo de SportClub">
+      <a href="landing.html" aria-label="Volver al inicio">
+        <img
+          class="logo"
+          src="assets/logo_empresa_letra_v1.png"
+          alt="Logo de SportClub"
+        />
+      </a>
     </header>
     <main>
-    <h2>Login</h2>
-    <form >
+      <h2>Login</h2>
+      <form action="dasboard-usuario.html" method="get">
         <label for="correo">Email:</label>
-        <input type="email" placeholder="Ingresa tu correo" requisred>
+        <input
+          id="correo"
+          name="correo"
+          type="email"
+          placeholder="Ingresa tu correo"
+          required
+        />
         <label for="contraseña">contraseña:</label>
-        <input type="password" placeholder="Ingresa tu contraseña" required>
+        <input
+          id="contraseña"
+          name="contraseña"
+          type="password"
+          placeholder="Ingresa tu contraseña"
+          required
+        />
         <button type="submit">Ingresar</button>
-    </form>
-    <hr>
-    <div class="auth-links">
+      </form>
+      <hr />
+      <div class="auth-links auth-links--login">
         <a href="recover.html">¿Olvidaste tu contraseña?</a>
         <a href="register.html">Registrarse</a>
-    </div>
-    </main> 
-</body>
+        <a href="dasboard-usuario.html">Dashboard Usuario</a>
+        <a href="dashboard-coach.html">Dashboard Coach</a>
+        <a href="dashboard-admin.html">Dashboard Admin</a>
+      </div>
+    </main>
+  </body>
 </html>

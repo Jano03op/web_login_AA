@@ -1,0 +1,254 @@
+<!doctype html>
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>SportClub Kinetic Vault - Coach Dashboard</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style-dashboard-coach.css" />
+  </head>
+  <body>
+    <header class="top-header">
+      <div class="container header-content">
+        <div class="logo-nav-group">
+          <a class="logo" href="landing.html">
+            <img
+              alt="SportClub Logo"
+              src="https://lh3.googleusercontent.com/aida/ADBb0ujzCk2evOW5X3ewcx9-MMaA1Av7bJINK1q1XUYsdvXopsuXYr9ZOrEuHfh6YuL96fp_nAzIvJRxccckU8xEV_9uZQnCuA3ggZ2uDWWDnWdY6f-LAAFXwyOgei6Qqf5sd0aylSwcEEIWVonD847kUaok79iqLi9bzWdjE-eZZalQdqHSTVluaJ8-e-sHTNVRFqOenOM6tQf9y6Z9NMANBK1f2HNyYT7gPof4buOZNTDoGMYgNfVDje1GiNbvvTL39FQPEuxGl8XP4Q"
+            />
+          </a>
+          <nav class="main-nav">
+            <ul>
+              <li>
+                <a class="active" href="dashboard-coach.html">Dashboard</a>
+              </li>
+              <li><a href="dasboard-usuario.html">Usuario</a></li>
+              <li><a href="dashboard-admin.html">Admin</a></li>
+              <li><a href="landing.html#entrenamiento">Horarios</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="auth-actions">
+          <a class="btn btn-text" href="register.html">Editar Perfil</a>
+          <a class="btn btn-primary" href="login.html">Cerrar Sesión</a>
+        </div>
+      </div>
+    </header>
+    <main class="container">
+      <!-- Hero Branding -->
+      <article class="hero">
+        <div class="hero-text">
+          <div class="badge">
+            <span class="dot"></span>
+            Coach Senior
+          </div>
+          <h1>Bienvenido, Coach Javier</h1>
+          <p>
+            Gestiona tus sesiones de entrenamiento, supervisa el progreso de tus
+            alumnos y optimiza tu tiempo hoy.
+          </p>
+        </div>
+        <div class="stats">
+          <div class="stat-card">
+            <span class="stat-label">Alumnos</span>
+            <span class="stat-value">24</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Clases Hoy</span>
+            <span class="stat-value">5</span>
+          </div>
+        </div>
+      </article>
+      <!-- Main Dashboard Content -->
+      <div class="dashboard-grid">
+        <!-- Left Column: Students -->
+        <section class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <span class="material-symbols-outlined">group</span>
+              Mis Alumnos
+            </h2>
+            <a class="btn-link" href="dasboard-usuario.html"
+              >Ver todos
+              <span class="material-symbols-outlined btn-link__icon"
+                >arrow_forward</span
+              ></a
+            >
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Alumno</th>
+                  <th>Email</th>
+                  <th>Plan</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="user-cell">
+                      <img
+                        alt="Carlos"
+                        class="avatar"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKCsr7C1o3CSkcp8Ahcj901y6Bsbf3bQ1MDS1ElQ44G4x9AzVxriStxLQ_tVXwhbbBaI5K_A-5FvkTvh_zgUDerCSpQH2Js9kWE1_zkWbaa5QM1ZNhzA1YdaUsHviQwcACRwC8zPS0quReZwFoZq4DbOTLNnRvKLEQ-bLFb6YOf3V2fX0ldOMYF8riUvn5auoslO-6MC1R_Hr2DapSnxcZYbVGC3uwfpF3xJIx3EWl1YKhd2qlOUT155L6u_ZGC_kpdu9kNz-8jss"
+                      />
+                      <span class="user-name">Carlos Méndez</span>
+                    </div>
+                  </td>
+                  <td class="cell-muted">c.mendez@email.com</td>
+                  <td><span class="tag tag-premium">Premium</span></td>
+                  <td>
+                    <span class="material-symbols-outlined action-icon"
+                      >more_vert</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="user-cell">
+                      <img
+                        alt="Sofia"
+                        class="avatar"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCTSyRvLxoDOFSd7gDOiLyKO8VChvDOlIuLZu8lsc-7MNDJvZI282xp97K4h1ZvHcJU-RjK9lbR-WXbfp7tnme51rTs9nUl1Hdf6qRjetpyv-7_Sf0j3-1_IxyDo_4bH3rUU_ojRBMRhgWu5bxTWbc-7St3BWrgpdsqjB1xdsYY4pDHLtbMlVlFa4EtPDisamUJ9SuM_oFfTH7iaskmkrBIL5VEOThLbbQHaNExEs6YHMd5g7yMhyMC9CnpXx64laIDpRq_eAVDJY"
+                      />
+                      <span class="user-name">Sofía Rodríguez</span>
+                    </div>
+                  </td>
+                  <td class="cell-muted">s.rodriguez@email.com</td>
+                  <td><span class="tag tag-standard">Estándar</span></td>
+                  <td>
+                    <span class="material-symbols-outlined action-icon"
+                      >more_vert</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="user-cell">
+                      <img
+                        alt="Marco"
+                        class="avatar"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz-rFBySb6em6br8CPcY5xGgael7aUp9g4dnSqFHHOYncNKh_tZVMA1c1fybm2aivbhcin0JQat2WJx6sbIdKoK3VOQE1-E2UyLCF2JQGGjxwWS-RDVsS6fV0QhI9N-nVcdGWB5ZkY07oG3xb2MisvlAn2T4sMLQvu0v-VrFciWddmcjHm9r3A4vHb8E-ouZ3gUEEtyBvZ2ndOpMAAl77mjP41l8nrYUWftek7kqrlA27TvCeJcg1Gtamlf4qNWINVm8SkVDP-bqk"
+                      />
+                      <span class="user-name">Marco Valenzuela</span>
+                    </div>
+                  </td>
+                  <td class="cell-muted">m.valenzuela@email.com</td>
+                  <td><span class="tag tag-premium">Premium</span></td>
+                  <td>
+                    <span class="material-symbols-outlined action-icon"
+                      >more_vert</span
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <!-- Right Column: Classes & Schedule -->
+        <div class="sidebar-stack">
+          <section class="card card--accent-left">
+            <div class="card-header">
+              <h2 class="card-title">
+                <span class="material-symbols-outlined">fitness_center</span>
+                Clases Asignadas
+              </h2>
+            </div>
+            <div class="class-card">
+              <div class="class-info-header">
+                <span class="class-name">Entrenamiento funcional</span>
+                <span class="day-badge">Martes</span>
+              </div>
+              <div class="class-meta">
+                <span
+                  ><span class="material-symbols-outlined">schedule</span> 19:00
+                  - 20:30</span
+                >
+                <span
+                  ><span class="material-symbols-outlined">location_on</span>
+                  Box Central</span
+                >
+              </div>
+            </div>
+            <div class="class-card">
+              <div class="class-info-header">
+                <span class="class-name">High Intensity Interval</span>
+                <span class="day-badge">Jueves</span>
+              </div>
+              <div class="class-meta">
+                <span
+                  ><span class="material-symbols-outlined">schedule</span> 08:00
+                  - 09:00</span
+                >
+                <span
+                  ><span class="material-symbols-outlined">location_on</span>
+                  Studio A</span
+                >
+              </div>
+            </div>
+          </section>
+          <section class="card">
+            <div class="card-header">
+              <h2 class="card-title">
+                <span class="material-symbols-outlined">calendar_today</span>
+                Mi Disponibilidad
+              </h2>
+            </div>
+            <ul class="schedule-list">
+              <li class="schedule-item">
+                <span class="day-label">Lunes - Miércoles</span>
+                <span class="time-label">07:00 — 12:00</span>
+              </li>
+              <li class="schedule-item">
+                <span class="day-label">Jueves</span>
+                <span class="time-label">14:00 — 20:00</span>
+              </li>
+              <li class="schedule-item">
+                <span class="day-label">Viernes</span>
+                <span class="time-label">08:00 — 16:00</span>
+              </li>
+              <li class="schedule-item">
+                <span class="day-label">Sábado</span>
+                <span class="time-none">Sin horario</span>
+              </li>
+            </ul>
+            <a class="btn btn-outline" href="dashboard-admin.html"
+              >Gestionar Calendario</a
+            >
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div class="container footer-content">
+        <div class="footer-info">
+          <div class="footer-logo">
+            <img
+              alt="SportClub White"
+              src="https://lh3.googleusercontent.com/aida/ADBb0ujzCk2evOW5X3ewcx9-MMaA1Av7bJINK1q1XUYsdvXopsuXYr9ZOrEuHfh6YuL96fp_nAzIvJRxccckU8xEV_9uZQnCuA3ggZ2uDWWDnWdY6f-LAAFXwyOgei6Qqf5sd0aylSwcEEIWVonD847kUaok79iqLi9bzWdjE-eZZalQdqHSTVluaJ8-e-sHTNVRFqOenOM6tQf9y6Z9NMANBK1f2HNyYT7gPof4buOZNTDoGMYgNfVDje1GiNbvvTL39FQPEuxGl8XP4Q"
+            />
+          </div>
+          <p class="copyright">
+            © 2026 SportClub. Todos los derechos reservados.
+          </p>
+        </div>
+        <nav class="footer-links">
+          <a href="landing.html">Inicio</a>
+          <a href="dasboard-usuario.html">Dashboard Usuario</a>
+          <a href="dashboard-admin.html">Dashboard Admin</a>
+          <a href="login.html">Salir</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

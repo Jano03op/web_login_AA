@@ -1,0 +1,235 @@
+<!doctype html>
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>SportClub Kinetic Vault - Admin Dashboard</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style-dashboard-admin.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="header-left">
+          <a class="logo" href="landing.html">
+            <img
+              alt="SportClub Logo"
+              src="https://lh3.googleusercontent.com/aida/ADBb0ujzCk2evOW5X3ewcx9-MMaA1Av7bJINK1q1XUYsdvXopsuXYr9ZOrEuHfh6YuL96fp_nAzIvJRxccckU8xEV_9uZQnCuA3ggZ2uDWWDnWdY6f-LAAFXwyOgei6Qqf5sd0aylSwcEEIWVonD847kUaok79iqLi9bzWdjE-eZZalQdqHSTVluaJ8-e-sHTNVRFqOenOM6tQf9y6Z9NMANBK1f2HNyYT7gPof4buOZNTDoGMYgNfVDje1GiNbvvTL39FQPEuxGl8XP4Q"
+            />
+          </a>
+          <nav>
+            <ul>
+              <li>
+                <a class="active" href="dashboard-admin.html">Dashboard</a>
+              </li>
+              <li><a href="dasboard-usuario.html">Usuarios</a></li>
+              <li><a href="dashboard-coach.html">Reportes</a></li>
+              <li><a href="landing.html#vision">Configuración</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="header-right">
+          <a class="btn btn-text" href="register.html">Editar Perfil</a>
+          <a class="btn btn-danger" href="login.html">Cerrar Sesión</a>
+        </div>
+      </div>
+    </header>
+    <main>
+      <section class="hero">
+        <span>Panel de Administración</span>
+        <h1>Control del Vault Kinetic</h1>
+      </section>
+      <div class="stats-grid">
+        <article class="card card-stat-1">
+          <div>
+            <span class="material-symbols-outlined icon">group</span>
+            <p>Total Usuarios</p>
+          </div>
+          <h2>1,284</h2>
+        </article>
+        <article class="card card-stat-2">
+          <div>
+            <span class="material-symbols-outlined icon">fitness_center</span>
+            <p>Clases del Mes</p>
+          </div>
+          <h2>452</h2>
+        </article>
+        <article class="card card-active">
+          <div>
+            <span class="material-symbols-outlined icon"
+              >online_prediction</span
+            >
+            <p>Usuarios Activos</p>
+            <h2>142</h2>
+          </div>
+          <div class="badge-trend">
+            <span class="material-symbols-outlined badge-trend__icon"
+              >trending_up</span
+            >
+            +12% vs ayer
+          </div>
+        </article>
+        <article class="card card-daily">
+          <div>
+            <span class="material-symbols-outlined icon">calendar_today</span>
+            <p>Clases del Día</p>
+            <h2>18</h2>
+          </div>
+          <a class="btn-card" href="dashboard-coach.html">Ver Calendario</a>
+        </article>
+      </div>
+      <div class="workspace">
+        <section class="panel">
+          <div class="panel-header">
+            <h3 class="panel-title">
+              <span class="material-symbols-outlined">manage_accounts</span>
+              Gestión de Usuarios
+            </h3>
+            <div class="panel-header__actions">
+              <button class="btn btn-text btn-icon">
+                <span class="material-symbols-outlined">filter_list</span>
+              </button>
+              <a class="btn btn-primary" href="register.html"
+                >+ Nuevo Usuario</a
+              >
+            </div>
+          </div>
+          <div class="user-list">
+            <div class="user-row admin">
+              <div class="user-info">
+                <img
+                  alt="Carlos"
+                  class="avatar"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-jlujs7ASdrI3y0BObl6dyzoOCu-FRvwlxFREkH5s3ippxLs67zAVbZMF3mugeYAOzgd5qNPbMijaPPvLZ0r7KX5_Y-Ht1-RYU3TXNSssE8bEFeZM3s7GbmGZA-TpsfwIyUjFtQc5xNKn2E1FPdyFcJe92gr5FONuT7SnGaDCx41N2CIIMLoafUIhL-J1IW_JPw-ainW8q_yC4SnBqapMlJG7C0iv9woWDbtXtqzOO34V_YqvuBc5uhNEkIeE8CZ5OqL-7FQHURU"
+                />
+                <div class="user-details">
+                  <h4>Carlos Rodriguez</h4>
+                  <p>carlos.r@sportclub.com</p>
+                </div>
+              </div>
+              <span class="role-badge admin">Administrador</span>
+            </div>
+            <div class="user-row coach">
+              <div class="user-info">
+                <img
+                  alt="Elena"
+                  class="avatar"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKDIfcDWJObLQrh9wGxzVKQaL5un3jPg7QslpPyyyHR6t0bltBU5EyPWIKSF5LTqCNfblTJrAiRrE6GBrVxj3kzeydqlx4sXSfYQDG0yseLuWy0XtOOMc9i7QDA0Rh5PucYsCWu1Ogq9o38M_orwvUocptWr29frE6v-BscB8a57AiCJgyLIL1zkDDAd_mbGCLGzvnSkOEajsrzP7tQtAEW1nkOHBL2ywzrR1aGAGSoeVYGDvXS8zpqZYWgNDzaOHEpStxrbnnvJw"
+                />
+                <div class="user-details">
+                  <h4>Elena Martínez</h4>
+                  <p>elena.fit@sportclub.com</p>
+                </div>
+              </div>
+              <span class="role-badge coach">Entrenador</span>
+            </div>
+            <div class="user-row member">
+              <div class="user-info">
+                <img
+                  alt="Julian"
+                  class="avatar"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRBRz7QkpIAwy1vIVN0bPcW1Os1dJsHN-ltLeUrGCcivKtcM0O4HJoaA7geKpUOe_5Rp4wqwBCVd7Dcyu8qkVIzKaixusWyB06Q2Y57QDdwGvn9ljod3NSMmggV2GXwKCug68RdXpNsRoW8AWRzK0tFzBRW6D8hcpU1KwJQbBbKDxrebx1GVIBZAM82f9hyuP-Jywikbc1XCNOvx4iAE5PTMpbD8NCPhkV0EbGAB_pqS5nFKCvPHM3o25HcFk9fWxAXcKdFN9YX2s"
+                />
+                <div class="user-details">
+                  <h4>Julian Sossa</h4>
+                  <p>j.sossa@gmail.com</p>
+                </div>
+              </div>
+              <span class="role-badge member">Usuario</span>
+            </div>
+            <div class="user-row member">
+              <div class="user-info">
+                <img
+                  alt="Lucia"
+                  class="avatar"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAv4RX3mLvRPu4-58IQt5lDF1_VE_wdTEYlgmMSHI5xF34SXSLxwzWjPhTisRL06zHNDuIRzfO_eHAx446wuskibCtBTB4r7B5-4_3CLMj8-rHdOg574nJ2al-3dtLyXt5ThqmxhkZMt-7indkXgWbZqmiwxZXqneb-gHJncnLys3J95Earf964EoRga9pTxNcRGrOQf6AhI55-Ilk237DmkflPGEvN2m1bLyIkVq7HyTM-MfyR0Rzw73udtWUEVaG2BvLIrhYpkfo"
+                />
+                <div class="user-details">
+                  <h4>Lucía Ferreyra</h4>
+                  <p>lucia.ferr@hotmail.com</p>
+                </div>
+              </div>
+              <span class="role-badge member">Usuario</span>
+            </div>
+          </div>
+          <div class="panel-footer panel-footer--centered">
+            <a
+              class="btn btn-text btn-text--panel-link"
+              href="dasboard-usuario.html"
+            >
+              VER TODOS LOS USUARIOS
+            </a>
+          </div>
+        </section>
+        <aside class="side-col">
+          <section class="panel activity-panel">
+            <h3 class="panel-title panel-title--compact">Actividad Reciente</h3>
+            <div class="activity-list">
+              <div class="activity-item">
+                <div class="activity-dot activity-dot--primary"></div>
+                <div class="activity-content">
+                  <h5>Nueva inscripción de Membresía</h5>
+                  <p>Hace 15 minutos</p>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot activity-dot--error"></div>
+                <div class="activity-content">
+                  <h5>Cancelación de Clase: Boxeo 18hs</h5>
+                  <p>Hace 1 hora</p>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot activity-dot--success"></div>
+                <div class="activity-content">
+                  <h5>Pago procesado: Ticket #4829</h5>
+                  <p>Hace 3 horas</p>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="panel">
+            <h3 class="panel-title panel-title--compact">Herramientas</h3>
+            <div class="tools-grid">
+              <div class="tool-btn">
+                <span class="material-symbols-outlined">description</span>
+                <label>Exportar</label>
+              </div>
+              <div class="tool-btn">
+                <span class="material-symbols-outlined">analytics</span>
+                <label>Métricas</label>
+              </div>
+              <div class="tool-btn">
+                <span class="material-symbols-outlined">settings_suggest</span>
+                <label>Ajustes</label>
+              </div>
+              <div class="tool-btn">
+                <span class="material-symbols-outlined">contact_support</span>
+                <label>Soporte</label>
+              </div>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </main>
+    <footer>
+      <div class="footer-container">
+        <p>© 2026 SportClub. Todos los derechos reservados.</p>
+        <div class="footer-links">
+          <a href="landing.html">Inicio</a>
+          <a href="dasboard-usuario.html">Dashboard Usuario</a>
+          <a href="dashboard-coach.html">Dashboard Coach</a>
+          <a href="login.html">Salir</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

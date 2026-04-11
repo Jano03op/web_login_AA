@@ -1,0 +1,205 @@
+<!doctype html>
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Dashboard Usuario - SportClub</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style-dashboard-usuario.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="logo-nav">
+          <a class="logo" href="landing.html">
+            <img
+              alt="SportClub Logo"
+              src="https://lh3.googleusercontent.com/aida/ADBb0ujzCk2evOW5X3ewcx9-MMaA1Av7bJINK1q1XUYsdvXopsuXYr9ZOrEuHfh6YuL96fp_nAzIvJRxccckU8xEV_9uZQnCuA3ggZ2uDWWDnWdY6f-LAAFXwyOgei6Qqf5sd0aylSwcEEIWVonD847kUaok79iqLi9bzWdjE-eZZalQdqHSTVluaJ8-e-sHTNVRFqOenOM6tQf9y6Z9NMANBK1f2HNyYT7gPof4buOZNTDoGMYgNfVDje1GiNbvvTL39FQPEuxGl8XP4Q"
+            />
+          </a>
+          <nav>
+            <ul>
+              <li>
+                <a class="active" href="dasboard-usuario.html">Dashboard</a>
+              </li>
+              <li><a href="dashboard-coach.html">Coach</a></li>
+              <li><a href="dashboard-admin.html">Admin</a></li>
+              <li><a href="landing.html#beneficio">Membresía</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="header-actions">
+          <a class="btn btn-outline" href="register.html">Editar Perfil</a>
+          <a class="btn btn-primary" href="login.html">
+            <span class="material-symbols-outlined btn-icon-lg">logout</span>
+            Cerrar Sesión
+          </a>
+        </div>
+      </div>
+    </header>
+    <main>
+      <aside class="sidebar">
+        <div class="profile-card">
+          <div class="profile-img-wrapper">
+            <img
+              alt="Juan Pérez"
+              class="profile-img"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuHhQg-oP0wpyP8GjFjKppNMxbJnDh5Xii_p1E-zbzuU7C28O7YlMyKqsEbaZ1dKt07cAcvhxpDqdfhIHVvKlVlttVDRvFEenPsmiqWlwgW7Zkq7X7nX2jekDgdHJ4sIBRGkF5Lj7yaK6pefTSKIt0zNuTPVV3Hsy2pHm4Q-VBZIQOdiX4H7q0tnZdMRzDK0aBQNc6GQo_1FLBgOkRCveJIFaLCzfssDndD1tNPvcXzVl9NG8LlHrF1JdhNKabRyGeMWqrpov1eIU"
+            />
+            <span class="status-dot"></span>
+          </div>
+          <h1>Juan Pérez</h1>
+          <p class="email">juan.perez@email.com</p>
+          <div class="badge">CrossFit Enthusiast</div>
+          <div class="profile-stats">
+            <div class="stat-item">
+              <span class="stat-label">Estado</span>
+              <span class="stat-value">Activo</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Socio desde</span>
+              <span class="stat-value">Ene 2024</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Próximo Pago</span>
+              <span class="stat-value">05 Abr</span>
+            </div>
+          </div>
+        </div>
+        <div class="promo-card">
+          <div class="promo-label">Próxima Sesión</div>
+          <h3>Clase de CrossFit</h3>
+          <div class="promo-info">
+            <span class="material-symbols-outlined">calendar_today</span>
+            <span>Lunes 18:00 HS</span>
+          </div>
+          <span class="material-symbols-outlined promo-icon-bg"
+            >fitness_center</span
+          >
+        </div>
+      </aside>
+      <section class="content-area">
+        <div>
+          <div class="section-header">
+            <h2 class="section-title">Tus Reservas</h2>
+            <a class="section-link" href="landing.html#entrenamiento"
+              >Ver Historial</a
+            >
+          </div>
+          <div class="reservation-list">
+            <div class="reservation-card">
+              <div class="res-info-box">
+                <div class="res-icon active">
+                  <span class="material-symbols-outlined">timer</span>
+                </div>
+                <div class="res-text">
+                  <h4>Clase de CrossFit</h4>
+                  <p>Lunes, 18 de Marzo • 18:00 - 19:30</p>
+                </div>
+              </div>
+              <div class="res-status-group">
+                <span class="status-pill">CONFIRMADA</span>
+                <button class="btn-cancel">
+                  <span class="material-symbols-outlined">cancel</span>
+                </button>
+              </div>
+            </div>
+            <div class="reservation-card">
+              <div class="res-info-box">
+                <div class="res-icon">
+                  <span class="material-symbols-outlined">fitness_center</span>
+                </div>
+                <div class="res-text">
+                  <h4>Entrenamiento Funcional</h4>
+                  <p>Miércoles, 20 de Marzo • 09:00 - 10:30</p>
+                </div>
+              </div>
+              <div class="res-status-group">
+                <span class="status-pill">CONFIRMADA</span>
+                <button class="btn-cancel">
+                  <span class="material-symbols-outlined">cancel</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="section-header">
+            <h2 class="section-title">Clases Disponibles</h2>
+            <p class="section-note">Reserva tu lugar ahora</p>
+          </div>
+          <div class="classes-grid">
+            <article class="class-card">
+              <div class="class-image">
+                <img
+                  alt="Yoga"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhy-x69Za8gkfEbv9Dbvcg0dRP38hcBMhiZJQLvkiODCnA3NGwBYHH7FgWLsEWvJxePH0xH0Zt6nIFzUZ8R-VyQJt36sL1FNhjhCZs-gtLsJxMe8APemfChy_1XQD8uBcpWSRIeVByN8wFLzzgbkgD-Y4WX2UpP_UWHpsancZNsvIre1NzQGCPW31_92ZYpb1NlyHMhdU35nor0BxxPRPLAByzdQ3w2FNNL3iGyHZmwFmgS0N1i-vZwqWMg1XFkj02FvRjOaBJln0"
+                />
+              </div>
+              <div class="class-content">
+                <h3>Yoga</h3>
+                <p>
+                  Flexibilidad y equilibrio para potenciar tu recuperación
+                  muscular.
+                </p>
+                <button class="btn-book">Reservar</button>
+              </div>
+            </article>
+            <article class="class-card">
+              <div class="class-image">
+                <img
+                  alt="Funcional"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDamcfl4rAP_OBzizuC0PLxI5rDQeM8FevSzVyZxoo5DRnrxQ6kYSlk-gOW714A2LyDAX59J4qgw76OuFtWHjHWqdE5rq_mDuH6vpl8px6g5fPzqRzLqgeNpUB9fwV8JEwqemR5-0qcI5P5VHqd4iYMgDOwUSQcmVRAS9ScDkjJTZ_1pLO4tivMK5BYB4u-tR_DMle6ZHUsl4f-Mft-BJ-s23td1VC2VVgyKJITrL995jg3yoeszNgbPAhnEOPin86MRfc-4anGawM"
+                />
+              </div>
+              <div class="class-content">
+                <h3>Funcional</h3>
+                <p>
+                  Circuitos de alta intensidad diseñados para quemar grasa y
+                  ganar fuerza.
+                </p>
+                <button class="btn-book">Reservar</button>
+              </div>
+            </article>
+            <article class="class-card">
+              <div class="class-image">
+                <img
+                  alt="Spinning"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvj1DD_BsGNshzA-kQPLVLZB_C3Yof2Kcgju4Z4DkUSKZ3iSa7Zac4COw2OY9-uZJUUnja4kmYjXhza8Fo9LdOEUL2pPBrOHMJTJ1oLEdrdoQrDAEMIa3U09HkVLwh4ASkJ2cEnUNb6DM_NL6Q-Z939hlEWIwRYnJjq7jILPHQ-PO-JCBB704yqna0IWHxY9SEQAgzrTl3M2yvAETiI3PBMYP-HmdPfA6PY3zLTmqvEyI-QGvUU4u3TSEIaY_Fo86t2UbcBKg8m5M"
+                />
+              </div>
+              <div class="class-content">
+                <h3>Spinning</h3>
+                <p>
+                  Desafía tus límites cardiovasculares al ritmo de la música.
+                </p>
+                <button class="btn-book">Reservar</button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div class="footer-container">
+        <div class="footer-copy">
+          © 2026 SportClub. Todos los derechos reservados.
+        </div>
+        <nav class="footer-nav">
+          <a href="landing.html">Inicio</a>
+          <a href="dashboard-coach.html">Dashboard Coach</a>
+          <a href="dashboard-admin.html">Dashboard Admin</a>
+          <a href="login.html">Salir</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

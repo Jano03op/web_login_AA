@@ -1,26 +1,38 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
     <title>recuperar_contrasena</title>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <img class="logo" src="assets/logo_empresa_letra_v1.png" alt="Logo de SportClub">
+      <a href="landing.html" aria-label="Volver al inicio">
+        <img
+          class="logo"
+          src="assets/logo_empresa_letra_v1.png"
+          alt="Logo de SportClub"
+        />
+      </a>
     </header>
     <main>
-        <h2>Recuperar contraseña</h2>
-        <form>
-            <label for="correo">Email:</label>
-            <input type="email" id="correo" name="correo" placeholder="Ingresa tu correo" required>
-            <button type="submit">Enviar enlace</button>
-        </form>
-        <div class="auth-links">
-            <a href="login.html">Volver al login</a>
-            <a href="register.html">Registrarse</a>
-        </div>
+      <h2>Recuperar contraseña</h2>
+      <form action="login.html" method="get">
+        <label for="correo">Email:</label>
+        <input
+          type="email"
+          id="correo"
+          name="correo"
+          placeholder="Ingresa tu correo"
+          required
+        />
+        <button type="submit">Enviar enlace</button>
+      </form>
+      <div class="auth-links">
+        <a href="login.html">Volver al login</a>
+        <a href="register.html">Registrarse</a>
+      </div>
     </main>
-</body>
+  </body>
 </html>
