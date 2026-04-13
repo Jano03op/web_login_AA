@@ -14,7 +14,7 @@ Interpretación de Identidad Visual: Traducción de la paleta corporativa en una
 Maquetación de Componentes: Generación de la estructura semántica para la Landing Page, incluyendo las secciones Hero, Beneficios y Visión, así como la estructura visual de los Dashboards para Usuario, Coach y Administrador.
 
 Consistencia de Diseño: Asegurar que los botones, tipografías y contenedores mantuvieran un estilo unificado a lo largo de todas las pantallas del sistema.
-![Interfaz de usuario de SportClub](/images/imagen-1.png)
+<img width="1480" height="1242" alt="image-1" src="https://github.com/user-attachments/assets/e904c39c-a2b2-4288-aa02-22c1b72d5a8d" />
 
 ## 3. Metodología y Buenas Prácticas
 El desarrollo no fue automatizado al 100%, sino guiado por criterios técnicos estrictos para garantizar la calidad del producto final:
