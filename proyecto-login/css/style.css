@@ -181,10 +181,6 @@ button:hover {
   transform: translateY(-1px);
 }
 
-.auth-links--login a:last-child {
-  grid-column: 1 / -1;
-}
-
 /* Radio Buttons */
 .radio-group {
   display: flex;
@@ -212,6 +208,27 @@ button:hover {
 }
 .radio-item:hover span {
   color: var(--primary);
+}
+.input-error {
+  border-color: #d93025;
+  box-shadow: 0 0 0 3px rgba(217, 48, 37, 0.14);
+  background: #fff5f5;
+}
+
+.form-message {
+  min-height: 1.25rem;
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.form-message.error {
+  color: #b3261e;
+}
+
+.form-message.success {
+  color: #1f7a43;
 }
 
 @media (max-width: 767px) {

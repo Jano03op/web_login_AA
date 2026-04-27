@@ -14,6 +14,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/style-dashboard-usuario.css" />
+    <script type="module" src="js/pages/dashboard-usuario.js"></script>
   </head>
   <body>
     <header>
@@ -28,7 +29,7 @@
           <nav>
             <ul>
               <li>
-                <a class="active" href="dasboard-usuario.html">Dashboard</a>
+                <a class="active" href="dashboard-usuario.html">Dashboard</a>
               </li>
               <li><a href="dashboard-coach.html">Coach</a></li>
               <li><a href="dashboard-admin.html">Admin</a></li>
@@ -56,8 +57,8 @@
             />
             <span class="status-dot"></span>
           </div>
-          <h1>Juan Pérez</h1>
-          <p class="email">juan.perez@email.com</p>
+          <h1 id="user-name">Usuario</h1>
+          <p class="email" id="user-email"></p>
           <div class="badge">CrossFit Enthusiast</div>
           <div class="profile-stats">
             <div class="stat-item">

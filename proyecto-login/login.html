@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,7 +18,7 @@
     </header>
     <main>
       <h2>Login</h2>
-      <form action="dasboard-usuario.html" method="get">
+      <form id="form-login">
         <label for="correo">Email:</label>
         <input
           id="correo"
@@ -36,15 +36,14 @@
           required
         />
         <button type="submit">Ingresar</button>
+        <div id="login-message" class="form-message" aria-live="polite"></div>
       </form>
       <hr />
       <div class="auth-links auth-links--login">
         <a href="recover.html">¿Olvidaste tu contraseña?</a>
         <a href="register.html">Registrarse</a>
-        <a href="dasboard-usuario.html">Dashboard Usuario</a>
-        <a href="dashboard-coach.html">Dashboard Coach</a>
-        <a href="dashboard-admin.html">Dashboard Admin</a>
       </div>
     </main>
+    <script type="module" src="js/pages/login.js"></script>
   </body>
 </html>

@@ -14,6 +14,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/style-dashboard-admin.css" />
+    <script type="module" src="js/pages/dashboard-admin.js"></script>
   </head>
   <body>
     <header>
@@ -30,7 +31,7 @@
               <li>
                 <a class="active" href="dashboard-admin.html">Dashboard</a>
               </li>
-              <li><a href="dasboard-usuario.html">Usuarios</a></li>
+              <li><a href="dashboard-usuario.html">Usuarios</a></li>
               <li><a href="dashboard-coach.html">Reportes</a></li>
               <li><a href="landing.html#vision">Configuración</a></li>
             </ul>
@@ -45,7 +46,7 @@
     <main>
       <section class="hero">
         <span>Panel de Administración</span>
-        <h1>Control del Vault Kinetic</h1>
+        <h1 id="admin-greeting">Panel de Administración</h1>
       </section>
       <div class="stats-grid">
         <article class="card card-stat-1">
@@ -163,7 +164,7 @@
           <div class="panel-footer panel-footer--centered">
             <a
               class="btn btn-text btn-text--panel-link"
-              href="dasboard-usuario.html"
+              href="dashboard-usuario.html"
             >
               VER TODOS LOS USUARIOS
             </a>
@@ -225,7 +226,7 @@
         <p>© 2026 SportClub. Todos los derechos reservados.</p>
         <div class="footer-links">
           <a href="landing.html">Inicio</a>
-          <a href="dasboard-usuario.html">Dashboard Usuario</a>
+          <a href="dashboard-usuario.html">Dashboard Usuario</a>
           <a href="dashboard-coach.html">Dashboard Coach</a>
           <a href="login.html">Salir</a>
         </div>

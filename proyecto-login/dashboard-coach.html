@@ -14,6 +14,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/style-dashboard-coach.css" />
+    <script type="module" src="js/pages/dashboard-coach.js"></script>
   </head>
   <body>
     <header class="top-header">
@@ -30,7 +31,7 @@
               <li>
                 <a class="active" href="dashboard-coach.html">Dashboard</a>
               </li>
-              <li><a href="dasboard-usuario.html">Usuario</a></li>
+              <li><a href="dashboard-usuario.html">Usuario</a></li>
               <li><a href="dashboard-admin.html">Admin</a></li>
               <li><a href="landing.html#entrenamiento">Horarios</a></li>
             </ul>
@@ -50,7 +51,7 @@
             <span class="dot"></span>
             Coach Senior
           </div>
-          <h1>Bienvenido, Coach Javier</h1>
+          <h1 id="coach-greeting">Bienvenido</h1>
           <p>
             Gestiona tus sesiones de entrenamiento, supervisa el progreso de tus
             alumnos y optimiza tu tiempo hoy.
@@ -76,7 +77,7 @@
               <span class="material-symbols-outlined">group</span>
               Mis Alumnos
             </h2>
-            <a class="btn-link" href="dasboard-usuario.html"
+            <a class="btn-link" href="dashboard-usuario.html"
               >Ver todos
               <span class="material-symbols-outlined btn-link__icon"
                 >arrow_forward</span
@@ -244,7 +245,7 @@
         </div>
         <nav class="footer-links">
           <a href="landing.html">Inicio</a>
-          <a href="dasboard-usuario.html">Dashboard Usuario</a>
+          <a href="dashboard-usuario.html">Dashboard Usuario</a>
           <a href="dashboard-admin.html">Dashboard Admin</a>
           <a href="login.html">Salir</a>
         </nav>
