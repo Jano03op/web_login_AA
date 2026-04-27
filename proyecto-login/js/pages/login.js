@@ -1,4 +1,4 @@
-import { users } from "../data/mock-db";
+import { users } from "../data/mock-db.js";
 
 const form = document.getElementById("form-login");
 const correoInput = document.getElementById("correo");
