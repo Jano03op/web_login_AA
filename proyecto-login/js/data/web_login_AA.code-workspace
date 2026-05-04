@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../FrontEnd-Backend-ClubDeportivo-main"
+		}
+	],
+	"settings": {
+		"liveServer.settings.host": "127.0.0.1",
+		"liveServer.settings.port": 5501,
+		"liveServer.settings.NoBrowser": true
+	}
+}
