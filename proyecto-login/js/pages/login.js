@@ -1,54 +1,98 @@
-import { users } from "../data/mock-db.js";
+import {
+  apiCall,
+  saveToken,
+  saveUser,
+} from "../services/api-client.js";
 
 const form = document.getElementById("form-login");
-const correoInput = document.getElementById("correo");
-const contrasenaInput = document.getElementById("contraseña");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
 const messageBox = document.getElementById("login-message");
+const submitButton = form.querySelector('button[type="submit"]');
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   clearValidation();
 
-  const correo = correoInput.value.trim().toLowerCase();
-  const contrasena = contrasenaInput.value.trim();
+  const email = emailInput.value.trim().toLowerCase();
+  const password = passwordInput.value.trim();
 
-  const errors = getLoginErrors(correo, contrasena);
+  // Validación local
+  const errors = getLoginErrors(email, password);
   if (errors.length > 0) {
     showMessage(errors.join(" "));
     return;
   }
 
-  const user = users.find(
-    (u) => u.user.toLowerCase() === correo && u.password === contrasena,
-  );
+  // Deshabilitar botón durante fetch
+  submitButton.disabled = true;
+  showMessage("Procesando...");
 
-  if (!user) {
-    markInvalid(correoInput);
-    markInvalid(contrasenaInput);
-    showMessage("Correo o contraseña incorrectos.");
-    return;
+  try {
+    // Llamar a la API
+    const result = await apiCall("/auth/login", "POST", {
+      email,
+      password,
+    });
+
+    if (result.ok && result.data) {
+      // Login exitoso
+      const { token, user } = result.data;
+
+      // Guardar token y usuario
+      saveToken(token);
+      saveUser(user);
+
+      showMessage("Ingreso exitoso. Redirigiendo...", "success");
+
+      // Redirigir después de 1.5 segundos
+      setTimeout(() => {
+        redirectByRole(user.role);
+      }, 1500);
+    } else {
+      // Error en credenciales o validación
+      markInvalid(emailInput);
+      markInvalid(passwordInput);
+      showMessage(result.message || "Error al iniciar sesión.");
+      submitButton.disabled = false;
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    showMessage("Error inesperado. Intenta más tarde.");
+    submitButton.disabled = false;
   }
-
-  localStorage.setItem("user", JSON.stringify(user));
-  showMessage("Ingreso exitoso. Redirigiendo...", "success");
-  redirectByRole(user.role);
 });
 
-function getLoginErrors(correo, contrasena) {
+function getLoginErrors(email, password) {
   const errors = [];
 
-  if (!correo) {
+  // Validar que no estén vacíos
+  if (!email) {
     errors.push("El correo es obligatorio.");
-    markInvalid(correoInput);
+    markInvalid(emailInput);
   }
 
-  if (!contrasena) {
+  if (!password) {
     errors.push("La contraseña es obligatoria.");
-    markInvalid(contrasenaInput);
+    markInvalid(passwordInput);
+  }
+
+  // Validar formato de email (si no está vacío)
+  if (email && !isValidEmail(email)) {
+    errors.push("Ingresa un correo válido.");
+    markInvalid(emailInput);
   }
 
   return errors;
+}
+
+/**
+ * Valida formato básico de email
+ */
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 }
 
 function markInvalid(input) {
@@ -56,8 +100,8 @@ function markInvalid(input) {
 }
 
 function clearValidation() {
-  correoInput.classList.remove("input-error");
-  contrasenaInput.classList.remove("input-error");
+  emailInput.classList.remove("input-error");
+  passwordInput.classList.remove("input-error");
   showMessage("");
 }
 
@@ -65,7 +109,16 @@ function showMessage(text, type = "error") {
   messageBox.textContent = text;
   messageBox.className = "form-message";
   if (!text) return;
+
   messageBox.classList.add(type);
+
+  // Auto-limpiar mensajes de éxito después de 5 segundos
+  if (type === "success") {
+    setTimeout(() => {
+      messageBox.textContent = "";
+      messageBox.className = "form-message";
+    }, 5000);
+  }
 }
 
 function redirectByRole(role) {
