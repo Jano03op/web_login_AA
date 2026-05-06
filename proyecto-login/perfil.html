@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Mi Perfil – SportClub</title>
+    <meta name="description" content="Gestiona tu información personal y preferencias de cuenta en SportClub." />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style-dashboard-usuario.css" />
+    <link rel="stylesheet" href="css/style-perfil.css" />
+    <script type="module" src="js/pages/perfil.js"></script>
+  </head>
+  <body>
+    <!-- ══ HEADER ══════════════════════════════════════ -->
+    <header>
+      <div class="header-container">
+        <div class="logo-nav">
+          <a class="logo" href="landing.html">
+            <img alt="SportClub Logo" src="assets/logo_empresa_letra_v1.png" />
+          </a>
+          <nav>
+            <ul>
+              <li>
+                <a href="dashboard-usuario.html">
+                  <span class="material-symbols-outlined nav-icon">dashboard</span>
+                  Dashboard
+                </a>
+              </li>
+              <li>
+                <a class="active" href="perfil.html">
+                  <span class="material-symbols-outlined nav-icon">manage_accounts</span>
+                  Mi Perfil
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div class="header-actions">
+          <a class="btn btn-outline" href="dashboard-usuario.html">
+            <span class="material-symbols-outlined">arrow_back</span>
+            Volver
+          </a>
+          <a class="btn btn-primary" href="login.html" id="logout-btn">
+            <span class="material-symbols-outlined btn-icon-lg">logout</span>
+            Cerrar Sesión
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ══ MAIN ════════════════════════════════════════ -->
+    <main class="perfil-main">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="breadcrumb">
+        <a href="dashboard-usuario.html">Inicio</a>
+        <span class="material-symbols-outlined bc-sep">chevron_right</span>
+        <span>Perfil</span>
+      </nav>
+
+      <!-- Módulo Header -->
+      <div class="perfil-module-header">
+        <div class="perfil-title-block">
+          <span class="material-symbols-outlined perfil-icon">manage_accounts</span>
+          <div>
+            <h1>Mi Perfil</h1>
+            <p class="perfil-desc">Gestiona tu información personal y preferencias de cuenta.</p>
+          </div>
+        </div>
+        <button class="btn btn-accent" id="btn-editar-perfil">
+          <span class="material-symbols-outlined">edit</span>
+          Editar Perfil
+        </button>
+      </div>
+
+      <!-- Toast -->
+      <div id="toast-container" class="toast-container" role="alert" aria-live="polite"></div>
+
+      <div class="perfil-layout">
+
+        <!-- ── SIDEBAR: Tarjeta de presentación ─────── -->
+        <aside class="perfil-sidebar">
+          <div class="perfil-card">
+            <!-- Avatar -->
+            <div class="avatar-wrapper">
+              <div class="avatar-circle" id="avatar-initials" aria-hidden="true">US</div>
+              <span class="online-dot" title="En línea"></span>
+            </div>
+
+            <h2 class="perfil-card-name" id="card-name">Cargando…</h2>
+            <p class="perfil-card-role-label" id="card-role-label">Usuario del Sistema</p>
+            <span class="role-badge role-user" id="card-role-badge">user</span>
+
+            <div class="perfil-info-list">
+              <div class="info-item">
+                <span class="material-symbols-outlined info-icon">mail</span>
+                <div>
+                  <span class="info-label">Email</span>
+                  <span class="info-value" id="card-email">—</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <span class="material-symbols-outlined info-icon">cake</span>
+                <div>
+                  <span class="info-label">Fecha de nacimiento</span>
+                  <span class="info-value" id="card-birthdate">—</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <span class="material-symbols-outlined info-icon">shield_person</span>
+                <div>
+                  <span class="info-label">Rol</span>
+                  <span class="info-value" id="card-role">—</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <span class="material-symbols-outlined info-icon">schedule</span>
+                <div>
+                  <span class="info-label">Fecha de registro</span>
+                  <span class="info-value" id="card-created">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- ── CONTENIDO PRINCIPAL ──────────────────── -->
+        <div class="perfil-content">
+
+          <!-- ══ SECCIÓN 1: Información Personal ══ -->
+          <section class="perfil-section" id="section-info">
+            <div class="section-head">
+              <div class="section-head-left">
+                <span class="material-symbols-outlined section-icon">person</span>
+                <div>
+                  <h2 class="section-title">Información Personal</h2>
+                  <p class="section-subtitle">Actualiza tus datos personales</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Vista de solo lectura -->
+            <div id="info-readonly" class="readonly-view">
+              <div class="readonly-grid">
+                <div class="readonly-field">
+                  <span class="readonly-label">Nombre completo</span>
+                  <span class="readonly-value" id="ro-name">—</span>
+                </div>
+                <div class="readonly-field">
+                  <span class="readonly-label">Email</span>
+                  <span class="readonly-value" id="ro-email">—</span>
+                </div>
+                <div class="readonly-field">
+                  <span class="readonly-label">Fecha de nacimiento</span>
+                  <span class="readonly-value" id="ro-birthdate">—</span>
+                </div>
+                <div class="readonly-field">
+                  <span class="readonly-label">Otros / Metadata</span>
+                  <span class="readonly-value" id="ro-metadata">—</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Formulario de edición (oculto por defecto) -->
+            <form id="form-info" class="edit-form hidden" novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="f-full-name">Nombre completo <span class="required">*</span></label>
+                  <input
+                    type="text"
+                    id="f-full-name"
+                    name="full_name"
+                    placeholder="Ej: Juan Pérez"
+                    autocomplete="name"
+                  />
+                  <span class="field-error" id="err-full-name"></span>
+                </div>
+                <div class="form-group">
+                  <label for="f-email">Email <span class="required">*</span></label>
+                  <input
+                    type="email"
+                    id="f-email"
+                    name="email"
+                    placeholder="Ej: juan@demo.cl"
+                    autocomplete="email"
+                  />
+                  <span class="field-error" id="err-email"></span>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="f-birthdate">Fecha de nacimiento</label>
+                  <input
+                    type="date"
+                    id="f-birthdate"
+                    name="birth_date"
+                    autocomplete="bday"
+                  />
+                  <span class="field-error" id="err-birthdate"></span>
+                </div>
+                <div class="form-group">
+                  <label for="f-sport">Deporte favorito</label>
+                  <input
+                    type="text"
+                    id="f-sport"
+                    name="sport"
+                    placeholder="Ej: Fútbol"
+                  />
+                </div>
+              </div>
+              <div class="form-row form-row--full">
+                <div class="form-group">
+                  <label for="f-metadata">Otros / Metadata <span class="hint">(intereses, habilidades, etc.)</span></label>
+                  <textarea
+                    id="f-metadata"
+                    name="metadata"
+                    rows="3"
+                    placeholder="Ej: Me interesa el análisis de rendimiento y la nutrición deportiva."
+                  ></textarea>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="button" class="btn btn-outline" id="btn-cancelar-info">Cancelar</button>
+                <button type="submit" class="btn btn-save" id="btn-guardar-info">
+                  <span class="material-symbols-outlined">check</span>
+                  Guardar cambios
+                </button>
+              </div>
+            </form>
+          </section>
+
+          <!-- ══ SECCIÓN 2: Seguridad / Cambiar Contraseña ══ -->
+          <section class="perfil-section" id="section-password">
+            <div class="section-head">
+              <div class="section-head-left">
+                <span class="material-symbols-outlined section-icon">lock</span>
+                <div>
+                  <h2 class="section-title">Cambiar Contraseña</h2>
+                  <p class="section-subtitle">Mantén tu cuenta segura actualizando tu contraseña</p>
+                </div>
+              </div>
+            </div>
+
+            <form id="form-password" novalidate>
+              <div class="form-row form-row--3">
+                <!-- Contraseña actual -->
+                <div class="form-group">
+                  <label for="f-current-pw">Contraseña actual <span class="required">*</span></label>
+                  <div class="input-pw-wrapper">
+                    <input
+                      type="password"
+                      id="f-current-pw"
+                      name="current_password"
+                      placeholder="Ingresa tu contraseña actual"
+                      autocomplete="current-password"
+                    />
+                    <button type="button" class="toggle-pw" data-target="f-current-pw" aria-label="Mostrar contraseña">
+                      <span class="material-symbols-outlined">visibility</span>
+                    </button>
+                  </div>
+                  <span class="field-error" id="err-current-pw"></span>
+                </div>
+
+                <!-- Nueva contraseña -->
+                <div class="form-group">
+                  <label for="f-new-pw">Nueva contraseña <span class="required">*</span></label>
+                  <div class="input-pw-wrapper">
+                    <input
+                      type="password"
+                      id="f-new-pw"
+                      name="new_password"
+                      placeholder="Mínimo 8 caracteres"
+                      autocomplete="new-password"
+                    />
+                    <button type="button" class="toggle-pw" data-target="f-new-pw" aria-label="Mostrar nueva contraseña">
+                      <span class="material-symbols-outlined">visibility</span>
+                    </button>
+                  </div>
+                  <span class="field-error" id="err-new-pw"></span>
+                </div>
+
+                <!-- Confirmar contraseña -->
+                <div class="form-group">
+                  <label for="f-confirm-pw">Confirmar nueva contraseña <span class="required">*</span></label>
+                  <div class="input-pw-wrapper">
+                    <input
+                      type="password"
+                      id="f-confirm-pw"
+                      name="confirm_password"
+                      placeholder="Repite tu nueva contraseña"
+                      autocomplete="new-password"
+                    />
+                    <button type="button" class="toggle-pw" data-target="f-confirm-pw" aria-label="Mostrar confirmación">
+                      <span class="material-symbols-outlined">visibility</span>
+                    </button>
+                  </div>
+                  <span class="field-error" id="err-confirm-pw"></span>
+                </div>
+              </div>
+
+              <!-- Hint de seguridad -->
+              <div class="security-hint">
+                <span class="material-symbols-outlined">info</span>
+                La contraseña debe tener al menos 8 caracteres, incluir números y letras.
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="btn-actualizar-pw">
+                  <span class="material-symbols-outlined">lock_reset</span>
+                  Actualizar contraseña
+                </button>
+              </div>
+            </form>
+          </section>
+
+        </div><!-- /perfil-content -->
+      </div><!-- /perfil-layout -->
+    </main>
+
+    <!-- ══ FOOTER ══════════════════════════════════════ -->
+    <footer>
+      <div class="footer-container">
+        <div class="footer-copy">© 2026 SportClub. Todos los derechos reservados.</div>
+        <nav class="footer-nav">
+          <a href="landing.html">Inicio</a>
+          <a href="dashboard-usuario.html">Dashboard</a>
+          <a href="login.html">Salir</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

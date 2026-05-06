@@ -1,22 +1,25 @@
 <!doctype html>
-
 <html lang="es">
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>SportClub Kinetic Vault - Admin Dashboard</title>
+    <title>Gestión de Usuarios – SportClub Admin</title>
+    <meta name="description" content="Panel de administración para gestionar los usuarios del sistema SportClub." />
     <link
-      href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap"
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap"
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/style-dashboard-admin.css" />
+    <link rel="stylesheet" href="css/style-usuarios.css" />
     <script type="module" src="js/pages/dashboard-admin.js"></script>
+    <script type="module" src="js/pages/usuarios.js"></script>
   </head>
   <body>
+    <!-- HEADER -->
     <header>
       <div class="header-container">
         <div class="header-left">
@@ -26,208 +29,274 @@
           <nav>
             <ul>
               <li>
-                <a class="active" href="dashboard-admin.html">Dashboard</a>
+                <a class="active" href="dashboard-admin.html">
+                  <span class="material-symbols-outlined nav-icon">manage_accounts</span>
+                  Usuarios
+                </a>
               </li>
-              <li><a href="dashboard-usuario.html">Usuarios</a></li>
-              <li><a href="dashboard-coach.html">Reportes</a></li>
-              <li><a href="landing.html#vision">Configuración</a></li>
             </ul>
           </nav>
         </div>
         <div class="header-right">
-          <a class="btn btn-text" href="register.html">Editar Perfil</a>
-          <a class="btn btn-danger" href="login.html">Cerrar Sesión</a>
+          <div class="user-chip">
+            <span class="material-symbols-outlined">account_circle</span>
+            <div>
+              <span id="admin-name" class="chip-name">Admin</span>
+              <span class="chip-role">Administrador</span>
+            </div>
+          </div>
+          <a class="btn btn-danger" href="login.html" id="logout-btn">
+            <span class="material-symbols-outlined">logout</span>
+            Cerrar Sesión
+          </a>
         </div>
       </div>
     </header>
+
+    <!-- MAIN -->
     <main>
-      <section class="hero">
-        <span>Panel de Administración</span>
-        <h1 id="admin-greeting">Panel de Administración</h1>
-      </section>
-      <div class="stats-grid">
-        <article class="card card-stat-1">
+      <!-- Módulo Header -->
+      <div class="module-header">
+        <div class="module-title-block">
+          <span class="material-symbols-outlined module-icon">manage_accounts</span>
           <div>
-            <span class="material-symbols-outlined icon">group</span>
-            <p>Total Usuarios</p>
+            <h1>Gestión de Usuarios</h1>
+            <p class="module-desc">Administra los usuarios del sistema</p>
           </div>
-          <h2>1,284</h2>
-        </article>
-        <article class="card card-stat-2">
-          <div>
-            <span class="material-symbols-outlined icon">fitness_center</span>
-            <p>Clases del Mes</p>
-          </div>
-          <h2>452</h2>
-        </article>
-        <article class="card card-active">
-          <div>
-            <span class="material-symbols-outlined icon"
-              >online_prediction</span
-            >
-            <p>Usuarios Activos</p>
-            <h2>142</h2>
-          </div>
-          <div class="badge-trend">
-            <span class="material-symbols-outlined badge-trend__icon"
-              >trending_up</span
-            >
-            +12% vs ayer
-          </div>
-        </article>
-        <article class="card card-daily">
-          <div>
-            <span class="material-symbols-outlined icon">calendar_today</span>
-            <p>Clases del Día</p>
-            <h2>18</h2>
-          </div>
-          <a class="btn-card" href="dashboard-coach.html">Ver Calendario</a>
-        </article>
+        </div>
+        <button class="btn btn-success" id="btn-nuevo-usuario">
+          <span class="material-symbols-outlined">person_add</span>
+          Nuevo Usuario
+        </button>
       </div>
-      <div class="workspace">
-        <section class="panel">
-          <div class="panel-header">
-            <h3 class="panel-title">
-              <span class="material-symbols-outlined">manage_accounts</span>
-              Gestión de Usuarios
-            </h3>
-            <div class="panel-header__actions">
-              <button class="btn btn-text btn-icon">
-                <span class="material-symbols-outlined">filter_list</span>
-              </button>
-              <a class="btn btn-primary" href="register.html"
-                >+ Nuevo Usuario</a
-              >
+
+      <!-- Toast de notificaciones -->
+      <div id="toast-container" class="toast-container" role="alert" aria-live="polite"></div>
+
+      <!-- Card principal -->
+      <div class="card-main">
+        <div class="card-main-header">
+          <h2 class="table-section-title">
+            <span class="material-symbols-outlined">group</span>
+            Lista de Usuarios
+          </h2>
+          <div class="table-controls">
+            <div class="search-wrapper">
+              <span class="material-symbols-outlined search-icon">search</span>
+              <input
+                type="text"
+                id="search-input"
+                class="search-input"
+                placeholder="Buscar usuario..."
+                aria-label="Buscar usuario"
+              />
             </div>
+            <select id="filter-role" class="filter-select" aria-label="Filtrar por rol">
+              <option value="">Todos los roles</option>
+              <option value="admin">Admin</option>
+              <option value="coach">Coach</option>
+              <option value="user">User</option>
+            </select>
           </div>
-          <div class="user-list">
-            <div class="user-row admin">
-              <div class="user-info">
-                <img
-                  alt="Carlos"
-                  class="avatar"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-jlujs7ASdrI3y0BObl6dyzoOCu-FRvwlxFREkH5s3ippxLs67zAVbZMF3mugeYAOzgd5qNPbMijaPPvLZ0r7KX5_Y-Ht1-RYU3TXNSssE8bEFeZM3s7GbmGZA-TpsfwIyUjFtQc5xNKn2E1FPdyFcJe92gr5FONuT7SnGaDCx41N2CIIMLoafUIhL-J1IW_JPw-ainW8q_yC4SnBqapMlJG7C0iv9woWDbtXtqzOO34V_YqvuBc5uhNEkIeE8CZ5OqL-7FQHURU"
-                />
-                <div class="user-details">
-                  <h4>Carlos Rodriguez</h4>
-                  <p>carlos.r@sportclub.com</p>
-                </div>
-              </div>
-              <span class="role-badge admin">Administrador</span>
-            </div>
-            <div class="user-row coach">
-              <div class="user-info">
-                <img
-                  alt="Elena"
-                  class="avatar"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKDIfcDWJObLQrh9wGxzVKQaL5un3jPg7QslpPyyyHR6t0bltBU5EyPWIKSF5LTqCNfblTJrAiRrE6GBrVxj3kzeydqlx4sXSfYQDG0yseLuWy0XtOOMc9i7QDA0Rh5PucYsCWu1Ogq9o38M_orwvUocptWr29frE6v-BscB8a57AiCJgyLIL1zkDDAd_mbGCLGzvnSkOEajsrzP7tQtAEW1nkOHBL2ywzrR1aGAGSoeVYGDvXS8zpqZYWgNDzaOHEpStxrbnnvJw"
-                />
-                <div class="user-details">
-                  <h4>Elena Martínez</h4>
-                  <p>elena.fit@sportclub.com</p>
-                </div>
-              </div>
-              <span class="role-badge coach">Entrenador</span>
-            </div>
-            <div class="user-row member">
-              <div class="user-info">
-                <img
-                  alt="Julian"
-                  class="avatar"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRBRz7QkpIAwy1vIVN0bPcW1Os1dJsHN-ltLeUrGCcivKtcM0O4HJoaA7geKpUOe_5Rp4wqwBCVd7Dcyu8qkVIzKaixusWyB06Q2Y57QDdwGvn9ljod3NSMmggV2GXwKCug68RdXpNsRoW8AWRzK0tFzBRW6D8hcpU1KwJQbBbKDxrebx1GVIBZAM82f9hyuP-Jywikbc1XCNOvx4iAE5PTMpbD8NCPhkV0EbGAB_pqS5nFKCvPHM3o25HcFk9fWxAXcKdFN9YX2s"
-                />
-                <div class="user-details">
-                  <h4>Julian Sossa</h4>
-                  <p>j.sossa@gmail.com</p>
-                </div>
-              </div>
-              <span class="role-badge member">Usuario</span>
-            </div>
-            <div class="user-row member">
-              <div class="user-info">
-                <img
-                  alt="Lucia"
-                  class="avatar"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAv4RX3mLvRPu4-58IQt5lDF1_VE_wdTEYlgmMSHI5xF34SXSLxwzWjPhTisRL06zHNDuIRzfO_eHAx446wuskibCtBTB4r7B5-4_3CLMj8-rHdOg574nJ2al-3dtLyXt5ThqmxhkZMt-7indkXgWbZqmiwxZXqneb-gHJncnLys3J95Earf964EoRga9pTxNcRGrOQf6AhI55-Ilk237DmkflPGEvN2m1bLyIkVq7HyTM-MfyR0Rzw73udtWUEVaG2BvLIrhYpkfo"
-                />
-                <div class="user-details">
-                  <h4>Lucía Ferreyra</h4>
-                  <p>lucia.ferr@hotmail.com</p>
-                </div>
-              </div>
-              <span class="role-badge member">Usuario</span>
-            </div>
-          </div>
-          <div class="panel-footer panel-footer--centered">
-            <a
-              class="btn btn-text btn-text--panel-link"
-              href="dashboard-usuario.html"
-            >
-              VER TODOS LOS USUARIOS
-            </a>
-          </div>
-        </section>
-        <aside class="side-col">
-          <section class="panel activity-panel">
-            <h3 class="panel-title panel-title--compact">Actividad Reciente</h3>
-            <div class="activity-list">
-              <div class="activity-item">
-                <div class="activity-dot activity-dot--primary"></div>
-                <div class="activity-content">
-                  <h5>Nueva inscripción de Membresía</h5>
-                  <p>Hace 15 minutos</p>
-                </div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-dot activity-dot--error"></div>
-                <div class="activity-content">
-                  <h5>Cancelación de Clase: Boxeo 18hs</h5>
-                  <p>Hace 1 hora</p>
-                </div>
-              </div>
-              <div class="activity-item">
-                <div class="activity-dot activity-dot--success"></div>
-                <div class="activity-content">
-                  <h5>Pago procesado: Ticket #4829</h5>
-                  <p>Hace 3 horas</p>
-                </div>
-              </div>
-            </div>
-          </section>
-          <section class="panel">
-            <h3 class="panel-title panel-title--compact">Herramientas</h3>
-            <div class="tools-grid">
-              <div class="tool-btn">
-                <span class="material-symbols-outlined">description</span>
-                <label>Exportar</label>
-              </div>
-              <div class="tool-btn">
-                <span class="material-symbols-outlined">analytics</span>
-                <label>Métricas</label>
-              </div>
-              <div class="tool-btn">
-                <span class="material-symbols-outlined">settings_suggest</span>
-                <label>Ajustes</label>
-              </div>
-              <div class="tool-btn">
-                <span class="material-symbols-outlined">contact_support</span>
-                <label>Soporte</label>
-              </div>
-            </div>
-          </section>
-        </aside>
+        </div>
+
+        <!-- Loading state -->
+        <div id="table-loading" class="loading-state">
+          <span class="material-symbols-outlined spin">sync</span>
+          Cargando usuarios…
+        </div>
+
+        <!-- Error state -->
+        <div id="table-error" class="error-state hidden">
+          <span class="material-symbols-outlined">error</span>
+          <p id="table-error-msg">Error al cargar los usuarios.</p>
+          <button class="btn btn-outline" id="btn-retry">Reintentar</button>
+        </div>
+
+        <!-- Tabla -->
+        <div id="table-wrapper" class="table-wrapper hidden">
+          <table class="users-table" id="users-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre Completo</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Fecha de Registro</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="users-tbody">
+              <!-- filas inyectadas por JS -->
+            </tbody>
+          </table>
+          <p id="no-results" class="no-results hidden">No se encontraron usuarios.</p>
+        </div>
       </div>
     </main>
+
+    <!-- FOOTER -->
     <footer>
       <div class="footer-container">
         <p>© 2026 SportClub. Todos los derechos reservados.</p>
         <div class="footer-links">
           <a href="landing.html">Inicio</a>
-          <a href="dashboard-usuario.html">Dashboard Usuario</a>
-          <a href="dashboard-coach.html">Dashboard Coach</a>
           <a href="login.html">Salir</a>
         </div>
       </div>
     </footer>
+
+    <!-- ═══════════════════════════════════════════════
+         MODAL – Nuevo / Editar Usuario
+    ════════════════════════════════════════════════ -->
+    <div id="modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal">
+        <div class="modal-header">
+          <div class="modal-title-row">
+            <span class="material-symbols-outlined">person_add</span>
+            <h3 id="modal-title">Nuevo Usuario</h3>
+          </div>
+          <button class="modal-close" id="modal-close-btn" aria-label="Cerrar">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Info box -->
+          <div class="info-box">
+            <span class="material-symbols-outlined">info</span>
+            <div>
+              <strong>Información</strong>
+              <p>Desde aquí puedes crear, editar y eliminar usuarios del sistema.</p>
+              <ul>
+                <li>Solo los administradores pueden gestionar usuarios.</li>
+                <li>Los usuarios con rol <em>admin</em> tienen acceso total al sistema.</li>
+              </ul>
+            </div>
+          </div>
+
+          <form id="user-form" novalidate>
+            <input type="hidden" id="form-user-id" />
+
+            <div class="form-row">
+              <!-- Nombre Completo -->
+              <div class="form-group">
+                <label for="form-full-name">Nombre Completo <span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="form-full-name"
+                  name="full_name"
+                  placeholder="Ej: Juan Pérez"
+                  autocomplete="name"
+                />
+                <span class="field-error" id="err-full-name"></span>
+              </div>
+
+              <!-- Email -->
+              <div class="form-group">
+                <label for="form-email">Email <span class="required">*</span></label>
+                <input
+                  type="email"
+                  id="form-email"
+                  name="email"
+                  placeholder="Ej: juan@demo.cl"
+                  autocomplete="email"
+                />
+                <span class="field-error" id="err-email"></span>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <!-- Rol -->
+              <div class="form-group">
+                <label for="form-role">Rol <span class="required">*</span></label>
+                <select id="form-role" name="role">
+                  <option value="user">user</option>
+                  <option value="coach">coach</option>
+                  <option value="admin">admin</option>
+                </select>
+                <span class="field-error" id="err-role"></span>
+              </div>
+            </div>
+
+            <!-- Sección contraseña (solo visible en modo creación) -->
+            <div id="password-section">
+              <div class="form-row">
+                <!-- Contraseña -->
+                <div class="form-group">
+                  <label for="form-password">Contraseña <span class="required">*</span></label>
+                  <div class="input-icon-wrapper">
+                    <input
+                      type="password"
+                      id="form-password"
+                      name="password"
+                      placeholder="Mínimo 8 caracteres"
+                      autocomplete="new-password"
+                    />
+                    <button type="button" class="toggle-pw" data-target="form-password" aria-label="Mostrar contraseña">
+                      <span class="material-symbols-outlined">visibility</span>
+                    </button>
+                  </div>
+                  <span class="field-error" id="err-password"></span>
+                </div>
+
+                <!-- Confirmar Contraseña -->
+                <div class="form-group">
+                  <label for="form-confirm-password">Confirmar Contraseña <span class="required">*</span></label>
+                  <div class="input-icon-wrapper">
+                    <input
+                      type="password"
+                      id="form-confirm-password"
+                      name="confirm_password"
+                      placeholder="Repetir contraseña"
+                      autocomplete="new-password"
+                    />
+                    <button type="button" class="toggle-pw" data-target="form-confirm-password" aria-label="Mostrar confirmación">
+                      <span class="material-symbols-outlined">visibility</span>
+                    </button>
+                  </div>
+                  <span class="field-error" id="err-confirm-password"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline" id="btn-cancelar">Cancelar</button>
+              <button type="submit" class="btn btn-primary" id="btn-guardar">
+                <span class="material-symbols-outlined">save</span>
+                Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         MODAL – Confirmar Eliminación
+    ════════════════════════════════════════════════ -->
+    <div id="confirm-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+      <div class="modal modal--sm">
+        <div class="modal-header">
+          <div class="modal-title-row danger">
+            <span class="material-symbols-outlined">warning</span>
+            <h3 id="confirm-title">Eliminar Usuario</h3>
+          </div>
+          <button class="modal-close" id="confirm-close-btn" aria-label="Cerrar">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="confirm-msg" class="confirm-msg">¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="btn-cancel-delete">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="btn-confirm-delete">
+            <span class="material-symbols-outlined">delete</span>
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

@@ -1,117 +1,156 @@
-const form = document.querySelector("form");
-const nameInput = document.getElementById("nombre");
-const emailInput = document.getElementById("correo");
-const passwordInput = document.getElementById("contraseña");
+import { apiCall } from "../services/api-client.js";
+
+const form = document.getElementById("form-register");
+const nameInput = document.getElementById("full_name");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const confirmPasswordInput = document.getElementById("confirm_password");
 const messageBox = document.getElementById("register-message");
+const submitButton = form?.querySelector('button[type="submit"]');
 
-const API_URL = "http://localhost:3000/api";
-
-if (form) {
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+if (
+  form &&
+  nameInput &&
+  emailInput &&
+  passwordInput &&
+  confirmPasswordInput &&
+  messageBox &&
+  submitButton
+) {
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
     clearValidation();
 
-    // Validar inputs
-    if (nameInput) {
-      nameInput.value = nameInput.value.trim().replace(/\s+/g, " ");
-    }
+    const fullName = nameInput.value.trim().replace(/\s+/g, " ");
+    const email = emailInput.value.trim().toLowerCase();
+    const password = passwordInput.value.trim();
+    const confirmPassword = confirmPasswordInput.value.trim();
 
-    if (emailInput) {
-      emailInput.value = emailInput.value.trim().toLowerCase();
-    }
+    nameInput.value = fullName;
+    emailInput.value = email;
+    passwordInput.value = password;
+    confirmPasswordInput.value = confirmPassword;
 
-    if (passwordInput) {
-      passwordInput.value = passwordInput.value.trim();
-    }
-
-    const errors = getRegisterErrors();
+    const errors = getRegisterErrors(
+      fullName,
+      email,
+      password,
+      confirmPassword,
+    );
     if (errors.length > 0) {
       showMessage(errors.join(" "));
       return;
     }
 
-    try {
-      showMessage("Registrando usuario...", "info");
+    submitButton.disabled = true;
+    showMessage("Registrando usuario...");
 
-      const response = await fetch(`${API_URL}/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          full_name: nameInput.value,
-          email: emailInput.value,
-          password: passwordInput.value,
-        }),
+    try {
+      const result = await apiCall("/auth/register", "POST", {
+        full_name: fullName,
+        email,
+        password,
       });
 
-      const result = await response.json();
-
-      if (!response.ok || !result.ok) {
-        showMessage(result.message || "Error en el registro");
-        if (result.errors) {
-          Object.values(result.errors).forEach((error) => {
-            showMessage(error, "error");
-          });
-        }
+      if (result.ok) {
+        showMessage(
+          "Usuario registrado correctamente. Redirigiendo al login...",
+          "success",
+        );
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1500);
         return;
       }
 
-      showMessage("Registro exitoso. Redirigiendo al login...", "success");
-      setTimeout(() => {
-        window.location.href = "login.html";
-      }, 1500);
+      markInvalid(emailInput);
+      markInvalid(passwordInput);
+      markInvalid(confirmPasswordInput);
+      showMessage(formatApiErrors(result));
     } catch (error) {
-      console.error("Error al registrar:", error);
-      showMessage("Error de conexión. Verifica que el servidor esté corriendo");
+      console.error("Register error:", error);
+      showMessage("No fue posible completar el registro. Intenta nuevamente.");
+    } finally {
+      submitButton.disabled = false;
     }
   });
 }
 
-function getRegisterErrors() {
+function getRegisterErrors(fullName, email, password, confirmPassword) {
   const errors = [];
 
-  if (!nameInput || !nameInput.value.trim()) {
+  if (!fullName) {
     errors.push("El nombre es obligatorio.");
+    markInvalid(nameInput);
+  } else if (fullName.length < 3) {
+    errors.push("El nombre debe tener al menos 3 caracteres.");
     markInvalid(nameInput);
   }
 
-  if (!emailInput || !emailInput.value.trim()) {
+  if (!email) {
     errors.push("El correo es obligatorio.");
+    markInvalid(emailInput);
+  } else if (!isValidEmail(email)) {
+    errors.push("Ingresa un correo válido.");
     markInvalid(emailInput);
   }
 
-  if (!passwordInput || !passwordInput.value.trim()) {
+  if (!password) {
     errors.push("La contraseña es obligatoria.");
+    markInvalid(passwordInput);
+  } else if (password.length < 8) {
+    errors.push("La contraseña debe tener mínimo 8 caracteres.");
     markInvalid(passwordInput);
   }
 
-  if (passwordInput && passwordInput.value.trim().length < 8) {
-    errors.push("La contraseña debe tener al menos 8 caracteres.");
+  if (!confirmPassword) {
+    errors.push("Debes confirmar la contraseña.");
+    markInvalid(confirmPasswordInput);
+  } else if (password && confirmPassword !== password) {
+    errors.push("Las contraseñas no coinciden.");
     markInvalid(passwordInput);
+    markInvalid(confirmPasswordInput);
   }
 
   return errors;
 }
 
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 function markInvalid(input) {
-  if (input) {
-    input.classList.add("input-error");
-  }
+  input.classList.add("input-error");
 }
 
 function clearValidation() {
-  if (nameInput) nameInput.classList.remove("input-error");
-  if (emailInput) emailInput.classList.remove("input-error");
-  if (passwordInput) passwordInput.classList.remove("input-error");
+  nameInput.classList.remove("input-error");
+  emailInput.classList.remove("input-error");
+  passwordInput.classList.remove("input-error");
+  confirmPasswordInput.classList.remove("input-error");
   showMessage("");
 }
 
 function showMessage(text, type = "error") {
-  if (!messageBox) return;
   messageBox.textContent = text;
   messageBox.className = "form-message";
-  if (!text) return;
+
+  if (!text) {
+    return;
+  }
+
   messageBox.classList.add(type);
+}
+
+function formatApiErrors(result) {
+  if (result?.errors && typeof result.errors === "object") {
+    const messages = Object.values(result.errors).flat().filter(Boolean);
+    if (messages.length > 0) {
+      return messages.join(" ");
+    }
+  }
+
+  return result?.message || "No fue posible completar el registro.";
 }

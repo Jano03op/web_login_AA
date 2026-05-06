@@ -1,75 +1,94 @@
-const form = document.getElementById("form-login");
-const correoInput = document.getElementById("correo");
-const contrasenaInput = document.getElementById("contraseña");
-const messageBox = document.getElementById("login-message");
+import { apiCall, saveToken, saveUser } from "../services/api-client.js";
 
-const API_URL = "http://localhost:3000/api";
+const form = document.getElementById("form-login");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const messageBox = document.getElementById("login-message");
+const submitButton = form.querySelector('button[type="submit"]');
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   clearValidation();
 
-  const email = correoInput.value.trim().toLowerCase();
-  const password = contrasenaInput.value.trim();
+  const email = emailInput.value.trim().toLowerCase();
+  const password = passwordInput.value.trim();
 
+  // Validación local
   const errors = getLoginErrors(email, password);
   if (errors.length > 0) {
     showMessage(errors.join(" "));
     return;
   }
 
-  try {
-    showMessage("Procesando ingreso...", "info");
+  // Deshabilitar botón durante fetch
+  submitButton.disabled = true;
+  showMessage("Procesando...");
 
-    const response = await fetch(`${API_URL}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
+  try {
+    // Llamar a la API
+    const result = await apiCall("/auth/login", "POST", {
+      email,
+      password,
     });
 
-    const result = await response.json();
+    if (result.ok && result.data) {
+      // Login exitoso
+      const { token, user } = result.data;
 
-    if (!response.ok || !result.ok) {
-      markInvalid(correoInput);
-      markInvalid(contrasenaInput);
-      showMessage(result.message || "Error en el login");
-      return;
+      // Guardar token y usuario
+      saveToken(token);
+      saveUser(user);
+
+      showMessage("Ingreso exitoso. Redirigiendo...", "success");
+
+      // Redirigir después de 1.5 segundos
+      setTimeout(() => {
+        redirectByRole(user.role);
+      }, 1500);
+    } else {
+      // Error en credenciales o validación
+      markInvalid(emailInput);
+      markInvalid(passwordInput);
+      showMessage(result.message || "Error al iniciar sesión.");
+      submitButton.disabled = false;
     }
-
-    // Guardar token y usuario en localStorage
-    const { token, user } = result.data;
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
-
-    showMessage("Ingreso exitoso. Redirigiendo...", "success");
-    setTimeout(() => redirectByRole(user.role), 1500);
   } catch (error) {
-    console.error("Error al intentar login:", error);
-    showMessage(
-      "Error de conexión. Verifica que el servidor esté corriendo en http://localhost:3000",
-    );
-    markInvalid(correoInput);
-    markInvalid(contrasenaInput);
+    console.error("Login error:", error);
+    showMessage("Error inesperado. Intenta más tarde.");
+    submitButton.disabled = false;
   }
 });
 
 function getLoginErrors(email, password) {
   const errors = [];
 
+  // Validar que no estén vacíos
   if (!email) {
     errors.push("El correo es obligatorio.");
-    markInvalid(correoInput);
+    markInvalid(emailInput);
   }
 
   if (!password) {
     errors.push("La contraseña es obligatoria.");
-    markInvalid(contrasenaInput);
+    markInvalid(passwordInput);
+  }
+
+  // Validar formato de email (si no está vacío)
+  if (email && !isValidEmail(email)) {
+    errors.push("Ingresa un correo válido.");
+    markInvalid(emailInput);
   }
 
   return errors;
+}
+
+/**
+ * Valida formato básico de email
+ */
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 }
 
 function markInvalid(input) {
@@ -77,8 +96,8 @@ function markInvalid(input) {
 }
 
 function clearValidation() {
-  correoInput.classList.remove("input-error");
-  contrasenaInput.classList.remove("input-error");
+  emailInput.classList.remove("input-error");
+  passwordInput.classList.remove("input-error");
   showMessage("");
 }
 
@@ -86,7 +105,16 @@ function showMessage(text, type = "error") {
   messageBox.textContent = text;
   messageBox.className = "form-message";
   if (!text) return;
+
   messageBox.classList.add(type);
+
+  // Auto-limpiar mensajes de éxito después de 5 segundos
+  if (type === "success") {
+    setTimeout(() => {
+      messageBox.textContent = "";
+      messageBox.className = "form-message";
+    }, 5000);
+  }
 }
 
 function redirectByRole(role) {
