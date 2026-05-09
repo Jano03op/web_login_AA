@@ -59,13 +59,24 @@
   align-items: center;
   gap: 0.6rem;
   background: rgba(46, 26, 71, 0.06);
-  padding: 0.4rem 0.85rem;
+  padding: 0.4rem 0.85rem 0.4rem 0.4rem;
   border-radius: 9999px;
 }
 
-.user-chip .material-symbols-outlined {
-  font-size: 1.75rem;
-  color: var(--primary);
+.avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2e1a47 0%, #5b21b6 100%);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.04em;
+  user-select: none;
+  flex-shrink: 0;
 }
 
 .chip-name {

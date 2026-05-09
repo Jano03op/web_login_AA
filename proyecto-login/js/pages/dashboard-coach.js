@@ -1,25 +1,35 @@
-const user = JSON.parse(localStorage.getItem("user"));
-const token = localStorage.getItem("token");
+/**
+ * dashboard-coach.js
+ * Guard de ruta y configuración del dashboard para el rol Entrenador.
+ */
 
-const routes = {
-  user: "dashboard-usuario.html",
-  coach: "dashboard-coach.html",
-  admin: "dashboard-admin.html",
-};
+import { requireRole, setupLogout } from "../utils/auth.js";
 
-if (!user || !token) {
-  window.location.href = "login.html";
-} else if (user.role !== "coach") {
-  window.location.href = routes[user.role] || "login.html";
-} else {
+const user = requireRole("coach"); // redirige si no es coach
+
+if (user) {
+  const name = user.full_name || user.name || "Coach";
+
+  /* ── Saludo en el hero ── */
   const greetingNode = document.getElementById("coach-greeting");
-  if (greetingNode)
-    greetingNode.textContent = "Bienvenido, " + (user.full_name || user.name);
+  if (greetingNode) greetingNode.textContent = "Bienvenido, " + name;
+
+  /* ── Avatar con iniciales en header chip ── */
+  const avatarEl = document.getElementById("coach-avatar");
+  if (avatarEl) avatarEl.textContent = getInitials(name);
+
+  /* ── Nombre en el chip ── */
+  const chipNameEl = document.getElementById("coach-chip-name");
+  if (chipNameEl) chipNameEl.textContent = name;
 }
 
-document.querySelectorAll('a[href="login.html"]').forEach((link) => {
-  link.addEventListener("click", () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-  });
-});
+setupLogout();
+
+/* ── Utilidad ── */
+function getInitials(name) {
+  if (!name) return "CO";
+  const parts = name.trim().split(/\s+/);
+  return parts.length >= 2
+    ? (parts[0][0] + parts[1][0]).toUpperCase()
+    : parts[0].slice(0, 2).toUpperCase();
+}

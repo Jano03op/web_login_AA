@@ -28,14 +28,19 @@
               <li>
                 <a class="active" href="dashboard-coach.html">Dashboard</a>
               </li>
-              <li><a href="dashboard-usuario.html">Usuario</a></li>
-              <li><a href="dashboard-admin.html">Admin</a></li>
               <li><a href="landing.html#entrenamiento">Horarios</a></li>
             </ul>
           </nav>
         </div>
         <div class="auth-actions">
-          <a class="btn btn-text" href="register.html">Editar Perfil</a>
+          <div class="user-chip">
+            <div class="avatar-circle" id="coach-avatar" aria-hidden="true">CO</div>
+            <div>
+              <span id="coach-chip-name" class="chip-name">Coach</span>
+              <span class="chip-role">Entrenador</span>
+            </div>
+          </div>
+          <a class="btn btn-text" href="perfil.html">Editar Perfil</a>
           <a class="btn btn-primary" href="login.html">Cerrar Sesión</a>
         </div>
       </div>
@@ -46,7 +51,7 @@
         <div class="hero-text">
           <div class="badge">
             <span class="dot"></span>
-            Coach Senior
+            Coach
           </div>
           <h1 id="coach-greeting">Bienvenido</h1>
           <p>
@@ -74,7 +79,7 @@
               <span class="material-symbols-outlined">group</span>
               Mis Alumnos
             </h2>
-            <a class="btn-link" href="dashboard-usuario.html"
+            <a class="btn-link" href=""
               >Ver todos
               <span class="material-symbols-outlined btn-link__icon"
                 >arrow_forward</span
@@ -220,7 +225,7 @@
                 <span class="time-none">Sin horario</span>
               </li>
             </ul>
-            <a class="btn btn-outline" href="dashboard-admin.html"
+            <a class="btn btn-outline" href=""
               >Gestionar Calendario</a
             >
           </section>
@@ -239,8 +244,6 @@
         </div>
         <nav class="footer-links">
           <a href="landing.html">Inicio</a>
-          <a href="dashboard-usuario.html">Dashboard Usuario</a>
-          <a href="dashboard-admin.html">Dashboard Admin</a>
           <a href="login.html">Salir</a>
         </nav>
       </div>

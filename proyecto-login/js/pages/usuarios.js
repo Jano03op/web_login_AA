@@ -4,13 +4,15 @@
  * Conectado al backend: http://localhost:3000/api
  */
 
-import { apiCall } from "../services/api-client.js";
+import { apiCall, getToken } from "../services/api-client.js";
+import { isValidEmail, isValidPassword, isValidFullName } from "../utils/validations.js";
+import { showToast } from "../utils/ui.js";
 
 /* ══════════════════════════════════════════════════
    1. Estado global del módulo
 ══════════════════════════════════════════════════ */
-let allUsers = [];
-let editingUserId = null;
+let allUsers       = [];
+let editingUserId  = null;
 let pendingDeleteId = null;
 
 /* ══════════════════════════════════════════════════
@@ -26,44 +28,41 @@ const searchInput   = document.getElementById("search-input");
 const filterRole    = document.getElementById("filter-role");
 
 // Modal crear/editar
-const modalOverlay  = document.getElementById("modal-overlay");
-const modalTitle    = document.getElementById("modal-title");
-const userForm      = document.getElementById("user-form");
-const formUserId    = document.getElementById("form-user-id");
-const formFullName  = document.getElementById("form-full-name");
-const formEmail     = document.getElementById("form-email");
-const formRole      = document.getElementById("form-role");
-const formPassword  = document.getElementById("form-password");
-const formConfirmPw = document.getElementById("form-confirm-password");
+const modalOverlay    = document.getElementById("modal-overlay");
+const modalTitle      = document.getElementById("modal-title");
+const userForm        = document.getElementById("user-form");
+const formUserId      = document.getElementById("form-user-id");
+const formFullName    = document.getElementById("form-full-name");
+const formEmail       = document.getElementById("form-email");
+const formRole        = document.getElementById("form-role");
+const formPassword    = document.getElementById("form-password");
+const formConfirmPw   = document.getElementById("form-confirm-password");
 const passwordSection = document.getElementById("password-section");
 
 // Modal confirmar eliminación
-const confirmOverlay  = document.getElementById("confirm-overlay");
-const confirmMsg      = document.getElementById("confirm-msg");
+const confirmOverlay = document.getElementById("confirm-overlay");
+const confirmMsg     = document.getElementById("confirm-msg");
 
 /* ══════════════════════════════════════════════════
-   3. Utilidades
+   3. Utilidades de formato
 ══════════════════════════════════════════════════ */
-function getToken() {
-  return localStorage.getItem("token");
-}
 
 /**
- * Formatea una fecha ISO a DD/MM/YYYY
+ * Formatea una fecha ISO a DD/MM/YYYY.
  * Parsea YYYY-MM-DD directamente para evitar desfase de zona horaria.
  * @param {string} dateStr
  * @returns {string}
  */
 function formatDate(dateStr) {
   if (!dateStr) return "—";
-  const raw = String(dateStr).split("T")[0]; // tomar solo la parte de fecha
+  const raw = String(dateStr).split("T")[0];
   const [year, month, day] = raw.split("-");
   if (!year || !month || !day) return "—";
   return `${day}/${month}/${year}`;
 }
 
 /**
- * Genera un badge HTML para el rol
+ * Genera un badge HTML para el rol.
  * @param {string} role
  * @returns {string}
  */
@@ -73,31 +72,13 @@ function roleBadge(role) {
   return `<span class="role-badge ${cls}">${role || "user"}</span>`;
 }
 
-/* ── Toast ─────────────────────────────── */
-function showToast(message, type = "info") {
-  const container = document.getElementById("toast-container");
-  const toast = document.createElement("div");
-  toast.className = `toast toast-${type}`;
-
-  const iconMap = { success: "check_circle", error: "error", info: "info" };
-  toast.innerHTML = `
-    <span class="material-symbols-outlined">${iconMap[type] || "info"}</span>
-    <span>${message}</span>
-  `;
-
-  container.appendChild(toast);
-
-  setTimeout(() => {
-    toast.classList.add("removing");
-    toast.addEventListener("animationend", () => toast.remove(), { once: true });
-  }, 3500);
-}
-
-/* ── Validaciones del formulario ─────────────────────────────── */
+/* ══════════════════════════════════════════════════
+   4. Validaciones del formulario
+══════════════════════════════════════════════════ */
 function clearErrors() {
   document.querySelectorAll(".field-error").forEach((el) => (el.textContent = ""));
   document.querySelectorAll(".input-error").forEach((el) =>
-    el.classList.remove("input-error")
+    el.classList.remove("input-error"),
   );
 }
 
@@ -110,22 +91,20 @@ function validateForm(isEdit) {
   clearErrors();
   let valid = true;
 
-  // Nombre completo
-  if (!formFullName.value.trim()) {
-    setError(formFullName, document.getElementById("err-full-name"), "El nombre completo es obligatorio.");
+  if (!isValidFullName(formFullName.value.trim())) {
+    setError(formFullName, document.getElementById("err-full-name"),
+      formFullName.value.trim() ? "El nombre debe tener al menos 3 caracteres." : "El nombre completo es obligatorio.");
     valid = false;
   }
 
-  // Email
   if (!formEmail.value.trim()) {
     setError(formEmail, document.getElementById("err-email"), "El email es obligatorio.");
     valid = false;
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formEmail.value.trim())) {
+  } else if (!isValidEmail(formEmail.value.trim())) {
     setError(formEmail, document.getElementById("err-email"), "Ingresa un email válido.");
     valid = false;
   }
 
-  // Rol
   if (!formRole.value) {
     setError(formRole, document.getElementById("err-role"), "Debes seleccionar un rol.");
     valid = false;
@@ -136,7 +115,7 @@ function validateForm(isEdit) {
     if (!formPassword.value) {
       setError(formPassword, document.getElementById("err-password"), "La contraseña es obligatoria.");
       valid = false;
-    } else if (formPassword.value.length < 8) {
+    } else if (!isValidPassword(formPassword.value)) {
       setError(formPassword, document.getElementById("err-password"), "La contraseña debe tener mínimo 8 caracteres.");
       valid = false;
     }
@@ -154,7 +133,7 @@ function validateForm(isEdit) {
 }
 
 /* ══════════════════════════════════════════════════
-   4. Render de la tabla
+   5. Render de la tabla
 ══════════════════════════════════════════════════ */
 function renderTable(users) {
   tbody.innerHTML = "";
@@ -203,7 +182,7 @@ function renderTable(users) {
   });
 }
 
-/* ── Filtrar lista según búsqueda y rol ─────────────────────────────── */
+/* ── Filtrar lista según búsqueda y rol ── */
 function applyFilters() {
   const query = searchInput.value.toLowerCase().trim();
   const role  = filterRole.value;
@@ -219,10 +198,9 @@ function applyFilters() {
 }
 
 /* ══════════════════════════════════════════════════
-   5. Carga de usuarios desde el API
+   6. Carga de usuarios desde el API
 ══════════════════════════════════════════════════ */
 async function loadUsers() {
-  // Mostrar loading
   tableLoading.classList.remove("hidden");
   tableError.classList.add("hidden");
   tableWrapper.classList.add("hidden");
@@ -237,15 +215,16 @@ async function loadUsers() {
     return;
   }
 
-  // El backend puede devolver array directamente o en data
-  allUsers = Array.isArray(result.data) ? result.data : (result.data?.users || []);
+  allUsers = Array.isArray(result.data)
+    ? result.data
+    : (result.data?.users || []);
 
   tableWrapper.classList.remove("hidden");
   applyFilters();
 }
 
 /* ══════════════════════════════════════════════════
-   6. Abrir / cerrar modal crear/editar
+   7. Abrir / cerrar modal crear/editar
 ══════════════════════════════════════════════════ */
 function openModalCreate() {
   editingUserId = null;
@@ -254,8 +233,8 @@ function openModalCreate() {
   clearErrors();
   formUserId.value = "";
   passwordSection.classList.remove("hidden");
-  formPassword.required = true;
-  formConfirmPw.required = true;
+  formPassword.required    = true;
+  formConfirmPw.required   = true;
   modalOverlay.classList.remove("hidden");
   formFullName.focus();
 }
@@ -265,13 +244,13 @@ function openModalEdit(user) {
   modalTitle.textContent = "Editar Usuario";
   userForm.reset();
   clearErrors();
-  formUserId.value  = user.id;
+  formUserId.value   = user.id;
   formFullName.value = user.full_name || user.name || "";
-  formEmail.value   = user.email || "";
-  formRole.value    = user.role || "user";
-  // Ocultar campos de contraseña en edición
+  formEmail.value    = user.email || "";
+  formRole.value     = user.role || "user";
+  // Ocultar campos de contraseña en modo edición
   passwordSection.classList.add("hidden");
-  formPassword.required = false;
+  formPassword.required  = false;
   formConfirmPw.required = false;
   modalOverlay.classList.remove("hidden");
   formFullName.focus();
@@ -285,7 +264,7 @@ function closeModal() {
 }
 
 /* ══════════════════════════════════════════════════
-   7. Submit del formulario (crear o editar)
+   8. Submit del formulario (crear o editar)
 ══════════════════════════════════════════════════ */
 async function handleFormSubmit(e) {
   e.preventDefault();
@@ -305,17 +284,12 @@ async function handleFormSubmit(e) {
 
   if (!isEdit) {
     payload.password = formPassword.value;
-    // El validador del backend requiere metadata como objeto con sports[]
     payload.metadata = { sports: [] };
   }
 
-  let result;
-
-  if (isEdit) {
-    result = await apiCall(`/users/${editingUserId}`, "PUT", payload, getToken());
-  } else {
-    result = await apiCall("/users", "POST", payload, getToken());
-  }
+  const endpoint = isEdit ? `/users/${editingUserId}` : "/users";
+  const method   = isEdit ? "PUT" : "POST";
+  const result   = await apiCall(endpoint, method, payload, getToken());
 
   btnGuardar.disabled = false;
   btnGuardar.innerHTML = `<span class="material-symbols-outlined">save</span> Guardar`;
@@ -327,14 +301,14 @@ async function handleFormSubmit(e) {
 
   showToast(
     isEdit ? "Usuario actualizado correctamente." : "Usuario creado correctamente.",
-    "success"
+    "success",
   );
   closeModal();
   await loadUsers();
 }
 
 /* ══════════════════════════════════════════════════
-   8. Eliminar usuario
+   9. Eliminar usuario
 ══════════════════════════════════════════════════ */
 function openConfirmDelete(id, name) {
   pendingDeleteId = id;
@@ -371,14 +345,32 @@ async function handleConfirmDelete() {
 }
 
 /* ══════════════════════════════════════════════════
-   9. Delegación de eventos (tabla)
+   10. Password toggle (visibility)
 ══════════════════════════════════════════════════ */
-tbody.addEventListener("click", async (e) => {
+document.querySelectorAll(".toggle-pw").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const input = document.getElementById(btn.dataset.target);
+    const icon  = btn.querySelector(".material-symbols-outlined");
+    if (!input) return;
+    if (input.type === "password") {
+      input.type       = "text";
+      icon.textContent = "visibility_off";
+    } else {
+      input.type       = "password";
+      icon.textContent = "visibility";
+    }
+  });
+});
+
+/* ══════════════════════════════════════════════════
+   11. Delegación de eventos (tabla)
+══════════════════════════════════════════════════ */
+tbody.addEventListener("click", (e) => {
   const editBtn   = e.target.closest(".btn-edit");
   const deleteBtn = e.target.closest(".btn-delete");
 
   if (editBtn) {
-    const id = Number(editBtn.dataset.id);
+    const id   = Number(editBtn.dataset.id);
     const user = allUsers.find((u) => u.id === id);
     if (user) openModalEdit(user);
   }
@@ -391,37 +383,16 @@ tbody.addEventListener("click", async (e) => {
 });
 
 /* ══════════════════════════════════════════════════
-   10. Password toggle (visibility)
+   12. Eventos generales
 ══════════════════════════════════════════════════ */
-document.querySelectorAll(".toggle-pw").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const targetId = btn.dataset.target;
-    const input = document.getElementById(targetId);
-    const icon  = btn.querySelector(".material-symbols-outlined");
-    if (input.type === "password") {
-      input.type = "text";
-      icon.textContent = "visibility_off";
-    } else {
-      input.type = "password";
-      icon.textContent = "visibility";
-    }
-  });
-});
-
-/* ══════════════════════════════════════════════════
-   11. Eventos generales
-══════════════════════════════════════════════════ */
-// Abrir modal nuevo usuario
 document.getElementById("btn-nuevo-usuario").addEventListener("click", openModalCreate);
 
-// Cerrar modales
 document.getElementById("modal-close-btn").addEventListener("click", closeModal);
 document.getElementById("btn-cancelar").addEventListener("click", closeModal);
 document.getElementById("confirm-close-btn").addEventListener("click", closeConfirmModal);
 document.getElementById("btn-cancel-delete").addEventListener("click", closeConfirmModal);
-
-// Confirmar eliminación
 document.getElementById("btn-confirm-delete").addEventListener("click", handleConfirmDelete);
+document.getElementById("btn-retry").addEventListener("click", loadUsers);
 
 // Click fuera del modal → cerrar
 modalOverlay.addEventListener("click", (e) => {
@@ -446,10 +417,7 @@ userForm.addEventListener("submit", handleFormSubmit);
 searchInput.addEventListener("input", applyFilters);
 filterRole.addEventListener("change", applyFilters);
 
-// Reintentar carga
-document.getElementById("btn-retry").addEventListener("click", loadUsers);
-
 /* ══════════════════════════════════════════════════
-   12. Inicialización
+   13. Inicialización
 ══════════════════════════════════════════════════ */
 loadUsers();

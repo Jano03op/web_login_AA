@@ -91,6 +91,49 @@ body {
 .auth-actions {
   display: flex;
   gap: 1rem;
+  align-items: center;
+}
+
+/* ── User chip con avatar en header ── */
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(46, 26, 71, 0.06);
+  padding: 0.4rem 0.85rem 0.4rem 0.4rem;
+  border-radius: 9999px;
+}
+
+.avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, #5b21b6 100%);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.04em;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.chip-name {
+  display: block;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--primary);
+  line-height: 1.1;
+}
+
+.chip-role {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .btn {

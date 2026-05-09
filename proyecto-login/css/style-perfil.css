@@ -45,10 +45,11 @@
 
 /* ══ Layout principal ════════════════════════════════════ */
 .perfil-main {
-  max-width: 1200px;
+  max-width: 1440px;
   margin: 2rem auto;
-  padding: 0 1.5rem;
+  padding: 0 2rem;
   flex-grow: 1;
+  grid-template-columns: 1fr
 }
 
 /* ══ Módulo Header ═══════════════════════════════════════ */
@@ -212,7 +213,7 @@ nav a {
 /* ══ Layout de dos columnas ══════════════════════════════ */
 .perfil-layout {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 260px 1fr;
   gap: 2rem;
   align-items: start;
 }
@@ -576,13 +577,19 @@ nav a {
 }
 
 /* ══ Responsive ══════════════════════════════════════════ */
-@media (max-width: 1024px) {
+@media (max-width: 1280px) {
   .perfil-layout {
-    grid-template-columns: 260px 1fr;
+    grid-template-columns: 240px 1fr;
   }
 
   .form-row--3 {
     grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .perfil-layout {
+    grid-template-columns: 220px 1fr;
   }
 }
 

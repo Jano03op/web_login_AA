@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/style.css" />
     <script type="module" src="js/pages/register.js"></script>
-    <title>Registrarse</title>
+    <title>Registrarse — SportClub</title>
   </head>
   <body>
     <header>
@@ -19,8 +19,9 @@
     </header>
     <main>
       <h2>Registrarse</h2>
-      <form id="form-register" action="login.html" method="get" novalidate>
-        <label for="full_name">Nombre:</label>
+      <form id="form-register" novalidate>
+        <!-- Nombre -->
+        <label for="full_name">Nombre completo:</label>
         <input
           type="text"
           id="full_name"
@@ -28,6 +29,8 @@
           placeholder="Ingresa tu nombre"
           required
         />
+
+        <!-- Email -->
         <label for="email">Email:</label>
         <input
           type="email"
@@ -36,14 +39,18 @@
           placeholder="Ingresa tu correo"
           required
         />
+
+        <!-- Contraseña -->
         <label for="password">Contraseña:</label>
         <input
           type="password"
           id="password"
           name="password"
-          placeholder="Ingresa tu contraseña"
+          placeholder="Mínimo 8 caracteres"
           required
         />
+
+        <!-- Confirmar contraseña -->
         <label for="confirm_password">Confirmar contraseña:</label>
         <input
           type="password"
@@ -52,37 +59,45 @@
           placeholder="Repite tu contraseña"
           required
         />
-        <label for="edad">Edad:</label>
+
+        <!-- Fecha de nacimiento (reemplaza a "edad") -->
+        <label for="birth_date">Fecha de nacimiento:</label>
         <input
-          type="number"
-          id="edad"
-          name="edad"
-          placeholder="Ingresa tu edad"
-          required
+          type="date"
+          id="birth_date"
+          name="birth_date"
         />
+
+        <!-- ¿Practica deporte? -->
         <label for="practicaDeporte">¿Practicas deporte?</label>
-        <select id="practicaDeporte">
+        <select id="practicaDeporte" name="practicaDeporte">
           <option value="si">Sí, regularmente</option>
           <option value="no">No actualmente</option>
           <option value="ocasional">Ocasionalmente</option>
         </select>
-        <label for="tipoDePorte">Tipo de deporte</label>
-        <select id="tipoDePorte">
-          <option value="">Selecciona el Tipo</option>
+
+        <!-- Tipo de deporte -->
+        <label for="tipoDeporte">Tipo de deporte:</label>
+        <select id="tipoDeporte" name="tipoDeporte">
+          <option value="">Selecciona el tipo</option>
           <option value="atletismo">Atletismo</option>
           <option value="natacion">Natación</option>
           <option value="ciclismo">Ciclismo</option>
-          <option value="futbol">fútbol</option>
-          <option value="fitness">Fitness/pesas</option>
+          <option value="futbol">Fútbol</option>
+          <option value="fitness">Fitness / Pesas</option>
           <option value="otros">Otros</option>
         </select>
-        <label for="objPersonal">Objetivo Personal</label>
+
+        <!-- Objetivo personal -->
+        <label for="objPersonal">Objetivo personal:</label>
         <input
           type="text"
           id="objPersonal"
           name="objPersonal"
           placeholder="Ej: Ganar masa muscular, mejorar resistencia..."
         />
+
+        <!-- Nivel de experiencia -->
         <div class="form-group">
           <label>Nivel de experiencia</label>
           <div class="radio-group">
@@ -100,12 +115,13 @@
             </label>
           </div>
         </div>
+
         <button type="submit">Registrarse</button>
         <div id="register-message" class="form-message" aria-live="polite"></div>
       </form>
       <div class="auth-links">
         <span>¿Ya eres miembro?</span>
-        <a href="login.html">Inicia sesion aquí</a>
+        <a href="login.html">Inicia sesión aquí</a>
       </div>
     </main>
   </body>

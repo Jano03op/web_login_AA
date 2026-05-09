@@ -166,6 +166,24 @@ main {
   border: 4px solid var(--surface-light);
 }
 
+/* Avatar con iniciales — reemplaza la foto de perfil */
+.avatar-circle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-purple) 0%, #5b21b6 100%);
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.05em;
+  user-select: none;
+  border: 4px solid var(--surface-light);
+  box-shadow: 0 4px 16px rgba(46, 26, 71, 0.25);
+}
+
 .status-dot {
   position: absolute;
   bottom: 5px;

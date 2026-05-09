@@ -8,38 +8,26 @@
  *   PUT  /api/auth/me/password      → cambiar contraseña { current_password, new_password, confirm_password }
  */
 
-import { apiCall } from "../services/api-client.js";
+import { apiCall, getToken } from "../services/api-client.js";
+import { isValidEmail, isValidPassword, isValidFullName } from "../utils/validations.js";
+import { showToast, clearInputErrors } from "../utils/ui.js";
+import { requireRole, getStoredUser, setupLogout } from "../utils/auth.js";
 
 /* ══════════════════════════════════════════════════
    1. Auth guard — cualquier rol autenticado
 ══════════════════════════════════════════════════ */
-const storedUser  = JSON.parse(localStorage.getItem("user"));
-const storedToken = localStorage.getItem("token");
-
-if (!storedUser || !storedToken) {
-  window.location.href = "login.html";
-}
-
-// Logout
-document.getElementById("logout-btn")?.addEventListener("click", () => {
-  localStorage.removeItem("user");
-  localStorage.removeItem("token");
-});
+requireRole(); // redirige a login si no hay sesión
+setupLogout();
 
 /* ══════════════════════════════════════════════════
-   2. Utilidades
+   2. Utilidades de formato
 ══════════════════════════════════════════════════ */
-function getToken() {
-  return localStorage.getItem("token");
-}
-
-function getStoredUser() {
-  return JSON.parse(localStorage.getItem("user"));
-}
 
 /**
- * Formatea fecha YYYY-MM-DD → DD/MM/YYYY
+ * Formatea fecha YYYY-MM-DD → DD/MM/YYYY.
  * Evita el desplazamiento de zona horaria parseando como fecha local.
+ * @param {string} str
+ * @returns {string}
  */
 function formatDate(str) {
   if (!str) return "—";
@@ -63,7 +51,7 @@ function initials(name) {
     : parts[0].slice(0, 2).toUpperCase();
 }
 
-/** Clase de role badge */
+/** Clase CSS del role badge */
 function roleBadgeClass(role) {
   const map = { admin: "role-admin", coach: "role-coach", user: "role-user" };
   return map[role] || "role-user";
@@ -75,43 +63,27 @@ function roleLabelText(role) {
   return labels[role] || "Usuario";
 }
 
-/* ── Toast ─────────────────────────────── */
-function showToast(message, type = "info") {
-  const container = document.getElementById("toast-container");
-  const toast = document.createElement("div");
-  toast.className = `toast toast-${type}`;
-  const icons = { success: "check_circle", error: "error", info: "info" };
-  toast.innerHTML = `
-    <span class="material-symbols-outlined">${icons[type] || "info"}</span>
-    <span>${message}</span>
-  `;
-  container.appendChild(toast);
-  setTimeout(() => {
-    toast.classList.add("removing");
-    toast.addEventListener("animationend", () => toast.remove(), { once: true });
-  }, 3800);
+/* ══════════════════════════════════════════════════
+   3. Utilidades DOM
+══════════════════════════════════════════════════ */
+function setText(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text ?? "";
 }
 
-/* ── Validaciones de formulario ─────────────────────────────── */
+function setValue(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.value = val || "";
+}
+
 function setError(inputEl, errorId, msg) {
   const errEl = document.getElementById(errorId);
   if (errEl) errEl.textContent = msg;
   if (inputEl) inputEl.classList.add("input-error");
 }
 
-function clearPwErrors() {
-  ["err-current-pw", "err-new-pw", "err-confirm-pw"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = "";
-  });
-  ["f-current-pw", "f-new-pw", "f-confirm-pw"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove("input-error");
-  });
-}
-
 /* ══════════════════════════════════════════════════
-   3. Carga y render del perfil
+   4. Carga y render del perfil
       GET /api/auth/me
 ══════════════════════════════════════════════════ */
 let currentUser = null;
@@ -120,7 +92,6 @@ async function loadProfile() {
   const base = getStoredUser();
   if (!base) return;
 
-  // Datos frescos desde el backend
   const result = await apiCall("/auth/me", "GET", null, getToken());
 
   if (result.ok && result.data) {
@@ -142,13 +113,13 @@ function renderProfile(u) {
   const birthdate = u.birth_date || "";
   const createdAt = u.created_at || u.createdAt || "";
 
-  // Extraer deporte y notas del objeto metadata del backend
+  // Extraer deporte y notas del objeto metadata
   // El modelo espera: { sports: [{ name, frequency_per_week }], ...otros }
-  const meta         = u.metadata || {};
-  const firstSport   = Array.isArray(meta.sports) && meta.sports[0]
+  const meta        = u.metadata || {};
+  const firstSport  = Array.isArray(meta.sports) && meta.sports[0]
     ? meta.sports[0].name || ""
     : "";
-  const metaDisplay  = Array.isArray(meta.sports) && meta.sports.length
+  const metaDisplay = Array.isArray(meta.sports) && meta.sports.length
     ? meta.sports.map((s) => `${s.name}${s.frequency_per_week ? ` (${s.frequency_per_week}x/semana)` : ""}`).join(", ")
     : "—";
 
@@ -167,7 +138,7 @@ function renderProfile(u) {
     badge.className   = `role-badge ${roleBadgeClass(role)}`;
   }
 
-  // ── Readonly view
+  // ── Vista de solo lectura
   setText("ro-name",      capitalize(name));
   setText("ro-email",     email || "—");
   setText("ro-birthdate", formatDate(birthdate));
@@ -179,7 +150,7 @@ function renderProfile(u) {
   setValue("f-birthdate", birthdate ? birthdate.split("T")[0] : "");
   setValue("f-sport",     firstSport);
 
-  // "Otros/metadata" como JSON legible si hay campos extra además de sports
+  // Campos extra de metadata como texto plano
   const extraMeta = Object.keys(meta)
     .filter((k) => k !== "sports")
     .map((k) => `${k}: ${JSON.stringify(meta[k])}`)
@@ -187,23 +158,16 @@ function renderProfile(u) {
   setValue("f-metadata", extraMeta);
 }
 
-function setText(id, text) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = text ?? "";
-}
-
-function setValue(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.value = val || "";
-}
-
 /* ══════════════════════════════════════════════════
-   4. Modo edición — Información Personal
+   5. Modo edición — Información Personal
 ══════════════════════════════════════════════════ */
 const infoReadonly    = document.getElementById("info-readonly");
 const formInfo        = document.getElementById("form-info");
 const btnEditarPerfil = document.getElementById("btn-editar-perfil");
 const btnCancelarInfo = document.getElementById("btn-cancelar-info");
+
+const INFO_INPUT_IDS = ["f-full-name", "f-email", "f-birthdate"];
+const INFO_ERROR_IDS = ["err-full-name", "err-email", "err-birthdate"];
 
 function enterEditMode() {
   infoReadonly.classList.add("hidden");
@@ -216,69 +180,53 @@ function exitEditMode() {
   formInfo.classList.add("hidden");
   infoReadonly.classList.remove("hidden");
   btnEditarPerfil.classList.remove("hidden");
-  // Limpiar errores del formulario de info
-  ["err-full-name", "err-email", "err-birthdate"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = "";
-  });
-  ["f-full-name", "f-email", "f-birthdate"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove("input-error");
-  });
+  clearInputErrors(INFO_INPUT_IDS, INFO_ERROR_IDS);
 }
 
 btnEditarPerfil?.addEventListener("click", enterEditMode);
 btnCancelarInfo?.addEventListener("click", exitEditMode);
 
-/* ── Submit: actualizar perfil ──────────────────────────────────
+/* ── Submit: actualizar perfil ────────────────────────────────
    PUT /api/auth/me
    Payload aceptado: { full_name, email, birth_date, metadata }
    metadata debe ser objeto JSON: { sports: [{ name, frequency_per_week }] }
-────────────────────────────────────────────────────────────────── */
-formInfo?.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  // Limpiar errores
-  ["err-full-name", "err-email", "err-birthdate"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = "";
-  });
-  ["f-full-name", "f-email", "f-birthdate"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove("input-error");
-  });
-
-  const fullName = document.getElementById("f-full-name").value.trim();
-  const email    = document.getElementById("f-email").value.trim();
-
+──────────────────────────────────────────────────────────────── */
+function validateInfoForm(fullName, email) {
+  clearInputErrors(INFO_INPUT_IDS, INFO_ERROR_IDS);
   let valid = true;
 
-  if (!fullName) {
-    setError(document.getElementById("f-full-name"), "err-full-name", "El nombre es obligatorio.");
-    valid = false;
-  } else if (fullName.length < 3) {
-    setError(document.getElementById("f-full-name"), "err-full-name", "El nombre debe tener al menos 3 caracteres.");
+  if (!isValidFullName(fullName)) {
+    setError(document.getElementById("f-full-name"), "err-full-name",
+      fullName ? "El nombre debe tener al menos 3 caracteres." : "El nombre es obligatorio.");
     valid = false;
   }
 
   if (!email) {
     setError(document.getElementById("f-email"), "err-email", "El email es obligatorio.");
     valid = false;
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  } else if (!isValidEmail(email)) {
     setError(document.getElementById("f-email"), "err-email", "Email inválido.");
     valid = false;
   }
 
-  if (!valid) return;
+  return valid;
+}
 
-  // Construir payload
+formInfo?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const fullName = document.getElementById("f-full-name").value.trim();
+  const email    = document.getElementById("f-email").value.trim();
+
+  if (!validateInfoForm(fullName, email)) return;
+
   const payload = { full_name: fullName, email };
 
   const birthdate = document.getElementById("f-birthdate").value;
-  if (birthdate) payload.birth_date = birthdate; // YYYY-MM-DD ← formato que acepta el backend
+  if (birthdate) payload.birth_date = birthdate;
 
-  // Construir metadata como objeto con sports[]
-  const sportName = document.getElementById("f-sport").value.trim();
+  // Construir metadata con sports[]
+  const sportName    = document.getElementById("f-sport").value.trim();
   const existingMeta = currentUser?.metadata || {};
   payload.metadata = {
     ...existingMeta,
@@ -291,7 +239,6 @@ formInfo?.addEventListener("submit", async (e) => {
   btnGuardar.disabled = true;
   btnGuardar.innerHTML = `<span class="material-symbols-outlined spin">sync</span> Guardando…`;
 
-  // PUT /api/auth/me
   const result = await apiCall("/auth/me", "PUT", payload, getToken());
 
   btnGuardar.disabled = false;
@@ -313,21 +260,15 @@ formInfo?.addEventListener("submit", async (e) => {
 });
 
 /* ══════════════════════════════════════════════════
-   5. Cambio de contraseña
+   6. Cambio de contraseña
       PUT /api/auth/me/password
       Payload: { current_password, new_password, confirm_password }
-      El backend valida la contraseña actual con bcrypt internamente.
-      Si es incorrecta devuelve 401 con message 'La contraseña actual es incorrecta.'
 ══════════════════════════════════════════════════ */
-document.getElementById("form-password")?.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  clearPwErrors();
+const PW_INPUT_IDS = ["f-current-pw", "f-new-pw", "f-confirm-pw"];
+const PW_ERROR_IDS = ["err-current-pw", "err-new-pw", "err-confirm-pw"];
 
-  const currentPw = document.getElementById("f-current-pw").value;
-  const newPw     = document.getElementById("f-new-pw").value;
-  const confirmPw = document.getElementById("f-confirm-pw").value;
-
-  // ── Validaciones frontend ──
+function validatePasswordForm(currentPw, newPw, confirmPw) {
+  clearInputErrors(PW_INPUT_IDS, PW_ERROR_IDS);
   let valid = true;
 
   if (!currentPw) {
@@ -338,7 +279,7 @@ document.getElementById("form-password")?.addEventListener("submit", async (e) =
   if (!newPw) {
     setError(document.getElementById("f-new-pw"), "err-new-pw", "La nueva contraseña es obligatoria.");
     valid = false;
-  } else if (newPw.length < 8) {
+  } else if (!isValidPassword(newPw)) {
     setError(document.getElementById("f-new-pw"), "err-new-pw", "La contraseña debe tener mínimo 8 caracteres.");
     valid = false;
   }
@@ -351,14 +292,22 @@ document.getElementById("form-password")?.addEventListener("submit", async (e) =
     valid = false;
   }
 
-  if (!valid) return;
+  return valid;
+}
+
+document.getElementById("form-password")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const currentPw = document.getElementById("f-current-pw").value;
+  const newPw     = document.getElementById("f-new-pw").value;
+  const confirmPw = document.getElementById("f-confirm-pw").value;
+
+  if (!validatePasswordForm(currentPw, newPw, confirmPw)) return;
 
   const btnActualizar = document.getElementById("btn-actualizar-pw");
   btnActualizar.disabled = true;
   btnActualizar.innerHTML = `<span class="material-symbols-outlined spin">sync</span> Actualizando…`;
 
-  // PUT /api/auth/me/password
-  // El backend valida current_password con bcrypt y responde 401 si es incorrecta
   const result = await apiCall("/auth/me/password", "PUT", {
     current_password: currentPw,
     new_password:     newPw,
@@ -369,14 +318,14 @@ document.getElementById("form-password")?.addEventListener("submit", async (e) =
   btnActualizar.innerHTML = `<span class="material-symbols-outlined">lock_reset</span> Actualizar contraseña`;
 
   if (!result.ok) {
-    // Intentar mapear el error al campo correspondiente
     const msg = result.message || "No se pudo cambiar la contraseña.";
+    const msgLower = msg.toLowerCase();
 
-    if (msg.toLowerCase().includes("actual") || msg.toLowerCase().includes("incorrecta")) {
+    if (msgLower.includes("actual") || msgLower.includes("incorrecta")) {
       setError(document.getElementById("f-current-pw"), "err-current-pw", msg);
-    } else if (msg.toLowerCase().includes("nueva") || msg.toLowerCase().includes("8")) {
+    } else if (msgLower.includes("nueva") || msgLower.includes("8")) {
       setError(document.getElementById("f-new-pw"), "err-new-pw", msg);
-    } else if (msg.toLowerCase().includes("coinciden")) {
+    } else if (msgLower.includes("coinciden")) {
       setError(document.getElementById("f-confirm-pw"), "err-confirm-pw", msg);
     } else {
       showToast(msg, "error");
@@ -385,15 +334,16 @@ document.getElementById("form-password")?.addEventListener("submit", async (e) =
   }
 
   // Limpiar campos tras éxito
-  document.getElementById("f-current-pw").value = "";
-  document.getElementById("f-new-pw").value     = "";
-  document.getElementById("f-confirm-pw").value  = "";
+  PW_INPUT_IDS.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
 
   showToast("Contraseña actualizada correctamente.", "success");
 });
 
 /* ══════════════════════════════════════════════════
-   6. Toggle visibilidad contraseñas
+   7. Toggle visibilidad contraseñas
 ══════════════════════════════════════════════════ */
 document.querySelectorAll(".toggle-pw").forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -401,16 +351,16 @@ document.querySelectorAll(".toggle-pw").forEach((btn) => {
     const icon  = btn.querySelector(".material-symbols-outlined");
     if (!input) return;
     if (input.type === "password") {
-      input.type = "text";
+      input.type       = "text";
       icon.textContent = "visibility_off";
     } else {
-      input.type = "password";
+      input.type       = "password";
       icon.textContent = "visibility";
     }
   });
 });
 
 /* ══════════════════════════════════════════════════
-   7. Inicialización
+   8. Inicialización
 ══════════════════════════════════════════════════ */
 loadProfile();
